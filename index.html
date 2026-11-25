@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -39,19 +38,16 @@
       gap: 10px;
     }
 
-    /* Su desktop è trasparente alla disposizione (identica all'originale) */
     .top-quarter {
       display: contents;
     }
 
-    /* RIQUADRI PRINCIPALI */
     .panel-box {
       background-color: #161616;
       border: 2px solid #e5e5e5;
       border-radius: 18px;
     }
 
-    /* 1. HEADER SUPERIORE (DESKTOP) */
     .top-header {
       padding: 10px 18px;
       display: flex;
@@ -127,7 +123,6 @@
     }
     .new-word-btn:hover { background: #991b1b; }
 
-    /* 2. RIGA HUD (DESKTOP) */
     .hud-panel {
       padding: 12px 18px;
       display: flex;
@@ -223,7 +218,6 @@
     .val-green { color: #2ecc71; }
     .val-cyan { color: #3498db; }
 
-    /* Elementi dedicati solo alla struttura mobile (nascosti su computer) */
     .mobile-time-box,
     .mobile-gallows-card,
     .mobile-status-bar,
@@ -231,7 +225,6 @@
       display: none;
     }
 
-    /* 3. AREA PRINCIPALE (DESKTOP) */
     .main-grid {
       display: grid;
       grid-template-columns: 1fr 290px;
@@ -257,7 +250,6 @@
       touch-action: none;
     }
 
-    /* SIDEBAR DESTRA (DESKTOP) */
     .sidebar-panel {
       padding: 12px;
       display: flex;
@@ -359,7 +351,6 @@
       touch-action: none;
     }
 
-    /* BANNER FASE PREPARATORIA */
     .prep-overlay {
       position: absolute;
       top: 10px;
@@ -394,7 +385,6 @@
     }
     .prep-skip-btn:hover { background: #ffcc00; }
 
-    /* MODAL INIZIALE */
     .modal-backdrop {
       position: absolute;
       inset: 0;
@@ -499,7 +489,6 @@
       transform: scale(1.03);
     }
 
-    /* OVERLAY FINALE */
     .fullscreen-overlay {
       position: fixed;
       inset: 0;
@@ -537,10 +526,6 @@
       letter-spacing: 3px;
     }
 
-    /* =========================================================================
-       STRUTTURA MOBILE & TABLET IN 4 QUARTI (25% / 50% / 25%)
-       Grafica e disegni IDENTICI, cambia solo la disposizione verticale!
-       ========================================================================= */
     @media (max-width: 900px), (hover: none) and (pointer: coarse) {
       .game-wrapper {
         height: 100dvh;
@@ -552,7 +537,6 @@
         overflow: hidden;
       }
 
-      /* 1° QUARTO (25% IN ALTO): Parola + Tempo + Mini Forca (0/6 errori) */
       .top-quarter {
         display: flex;
         flex-direction: column;
@@ -669,7 +653,6 @@
         padding-top: 2px;
       }
 
-      /* 2° + 3° QUARTO (50% AL CENTRO): TERRENO DI GIOCO */
       .main-grid {
         display: contents;
       }
@@ -680,7 +663,6 @@
         border-radius: 14px;
       }
 
-      /* 4° QUARTO (25% IN BASSO): STATO OMINO + SOLO TRACKPAD */
       .sidebar-panel {
         min-height: 0;
         height: 100%;
@@ -730,7 +712,6 @@
         border-radius: 10px;
       }
 
-      /* Modal iniziale a schermo intero */
       .modal-backdrop {
         position: fixed;
         inset: 0;
@@ -746,9 +727,7 @@
 <body>
 
   <div class="game-wrapper">
-    <!-- 1° QUARTO SU MOBILE (SU PC RESTANO I DUE RIQUADRI SEPARATI IDENTICI) -->
     <div class="top-quarter">
-      <!-- 1. HEADER SUPERIORE -->
       <div class="panel-box top-header">
         <div class="brand-group">
           <h1 class="brand-title">L'IMPICCATO DELL'OMINO SCEMO</h1>
@@ -761,7 +740,6 @@
         </div>
       </div>
 
-      <!-- 2. HUD PAROLA & STATO -->
       <div class="panel-box hud-panel">
         <div class="word-section">
           <div class="hud-subtitle">
@@ -770,20 +748,17 @@
           <div class="hint-inline" id="hintInline"></div>
           <div class="word-boxes" id="wordBoxes"></div>
 
-          <!-- Tempo rimasto compatto (visibile solo nel 1° quarto mobile) -->
           <div class="mobile-time-box">
             <span class="stat-label">TEMPO RIMASTO</span>
             <span class="stat-value val-yellow" id="mobileTimerVal">75s</span>
           </div>
         </div>
 
-        <!-- Mini forca compatta (visibile solo nel 1° quarto mobile) -->
         <div class="mobile-gallows-card">
           <canvas id="mobileGallowsCanvas" width="120" height="86"></canvas>
           <div class="mobile-errors-text" id="mobileErrorsVal">0 / 6 ERRORI</div>
         </div>
 
-        <!-- 3 Box Desktop -->
         <div class="stats-row">
           <div class="stat-box">
             <span class="stat-label">ERRORI FORCA</span>
@@ -801,19 +776,15 @@
       </div>
     </div>
 
-    <!-- 3. AREA DI GIOCO (2°+3° QUARTO MOBILE) + SIDEBAR/TRACKPAD (4° QUARTO MOBILE) -->
     <div class="main-grid">
-      <!-- ARENA -->
       <div class="panel-box arena-panel">
         <canvas id="arenaCanvas" width="780" height="480"></canvas>
 
-        <!-- Fase Preparatoria Difficile / Estremo -->
         <div class="prep-overlay" id="prepOverlay">
           <p id="prepText">FASE PREPARATORIA: 30s — Ragiona sull'indizio! Il mostro è fermo.</p>
           <button class="prep-skip-btn" id="prepSkipBtn">Ho capito, inizia subito!</button>
         </div>
 
-        <!-- POPUP INIZIALE -->
         <div class="modal-backdrop" id="startModal">
           <div class="modal-card">
             <h2 class="modal-title">ATTENZIONE: JUMP SCARE STUPIDI &amp; SUONI IMPROVVISI</h2>
@@ -839,7 +810,6 @@
         </div>
       </div>
 
-      <!-- SIDEBAR DESTRA (PC) / 4° QUARTO STATO + TRACKPAD (MOBILE) -->
       <div class="panel-box sidebar-panel">
         <div class="sb-gallows">
           <div class="sidebar-section-title">LA FORCA INCOMBENTE</div>
@@ -860,7 +830,6 @@
           <div class="keyboard-grid" id="keyboardGrid"></div>
         </div>
 
-        <!-- Stato omino + Trackpad (visibili nel 4° quarto mobile/tablet) -->
         <div class="mobile-status-bar">
           <span class="stat-label">STATO OMINO:</span>
           <span class="stat-value val-green" id="mobileStatusVal">Ignaro (per ora)</span>
@@ -876,7 +845,6 @@
     </div>
   </div>
 
-  <!-- SCHERMATA FINALE FULLSCREEN (JUMP SCARE + IMPICCATO / VITTORIA) -->
   <div class="fullscreen-overlay" id="endOverlay">
     <canvas id="endCanvas" width="520" height="340"></canvas>
     <div class="end-info" id="endInfo">
@@ -889,9 +857,6 @@
   </div>
 
   <script>
-    // =========================================================================
-    // 1. DATABASE PAROLE + GENERATORE ILLIMITATO DI PAROLE ITALIANE
-    // =========================================================================
     const CURATED_WORDS = [
       { word: "FRIGORIFERO", hint: "Scatola fredda che apri ogni 5 minuti sperando che compaia cibo nuovo." },
       { word: "COINCIDENZA", hint: "Quando il treno parte esattamente 12 secondi prima che arrivi tu." },
@@ -1141,9 +1106,6 @@
       return pickProceduralWord();
     }
 
-    // =========================================================================
-    // 2. AUDIO PROCEDURALE POTENZIATO PER MOBILE (iOS SAFARI & ANDROID)
-    // =========================================================================
     class HorrorAudio {
       constructor() {
         this.ctx = null;
@@ -1403,9 +1365,6 @@
       window.addEventListener(evt, () => audio.unlock(), { passive: true });
     });
 
-    // =========================================================================
-    // 3. ELEMENTI DOM & STATO DEL GIOCO
-    // =========================================================================
     const WORLD_W = 780;
     const WORLD_H = 480;
 
@@ -1547,9 +1506,6 @@
       return window.matchMedia('(max-width: 900px), (hover: none) and (pointer: coarse)').matches;
     }
 
-    // =========================================================================
-    // 4. COSTRUZIONE TASTIERA SIDEBAR (SOLO DESKTOP) & LOG DIARIO
-    // =========================================================================
     function buildSidebarKeyboard() {
       keyboardGrid.innerHTML = '';
       for (const ch of ALPHABET) {
@@ -1592,9 +1548,6 @@
       }
     }
 
-    // =========================================================================
-    // 5. EVENTI UI & CONTROLLI TRACKPAD / ARENA
-    // =========================================================================
     diffSelector.addEventListener('click', (e) => {
       const btn = e.target.closest('.diff-btn');
       if (!btn) return;
@@ -1711,9 +1664,6 @@
     attachTouchPadListeners(trackpadCanvas, 'trackpad');
     attachTouchPadListeners(canvas, 'arena');
 
-    // =========================================================================
-    // 6. LOGICA DI AVVIO E DIFFICOLTÀ
-    // =========================================================================
     function startGame(difficulty) {
       startModal.classList.add('hidden');
       joy.active = false;
@@ -1801,9 +1751,6 @@
       prepText.textContent = `FASE PREPARATORIA: ${Math.ceil(state.prepTimeLeft)}s — Ragiona sull'indizio! Il mostro è fermo.`;
     }
 
-    // =========================================================================
-    // 7. SFERE, LETTERE, ULTIMA LETTERA IN FUGA & '?'
-    // =========================================================================
     function getNeededUniqueLetters() {
       const needed = new Set();
       for (let i = 0; i < state.word.length; i++) {
@@ -2032,9 +1979,6 @@
       state.bubbleTimer = duration;
     }
 
-    // =========================================================================
-    // 8. FISICA, COLLISIONI, FUGA ULTIMA LETTERA & PATHFINDING MOSTRO
-    // =========================================================================
     function resolveCircleWall(entity, bottomPad = 4) {
       entity.x = Math.max(entity.r + 4, Math.min(WORLD_W - entity.r - 4, entity.x));
       entity.y = Math.max(entity.r + 4, Math.min(WORLD_H - entity.r - bottomPad, entity.y));
@@ -2367,9 +2311,6 @@
       }
     }
 
-    // =========================================================================
-    // 9. RENDERING DARK-SKETCH + FORCA INCOMBENTE + CAMERA MOBILE 1:1 + TRACKPAD
-    // =========================================================================
     function jitter(seed, amp = 1.6) {
       const x = Math.sin(seed * 12.9898 + state.sketchSeed * 0.17) * 43758.5453;
       return ((x - Math.floor(x)) - 0.5) * 2 * amp;
@@ -2764,340 +2705,4 @@
 
       const scale = Math.min(1, CW / 480, CH / 360);
       const boxW = 360 * scale;
-      const boxH = 220 * scale;
-      const cx = CW / 2;
-      const cy = CH / 2 - 18 * scale;
-      const bx = cx - boxW / 2;
-      const by = cy - boxH / 2;
-
-      c.save();
-      c.beginPath();
-      c.rect(bx, by, boxW, boxH);
-      c.clip();
-
-      c.translate(cx, cy);
-      c.scale(scale, scale);
-
-      c.fillStyle = '#070707';
-      c.fillRect(-180, -110, 360, 220);
-
-      c.strokeStyle = '#f3c623';
-      c.lineWidth = 1.6;
-      for (let i = 0; i < 16; i++) {
-        const a = (i / 16) * Math.PI * 2;
-        c.beginPath();
-        c.moveTo(0, 0);
-        c.lineTo(Math.cos(a) * 260, Math.sin(a) * 260);
-        c.stroke();
-      }
-
-      c.fillStyle = '#181818';
-      c.strokeStyle = '#ffffff';
-      c.lineWidth = 4;
-      drawSketchPolygonCircle(c, 0, 0, 74, 14, 700, 4.5);
-      c.fill();
-      c.stroke();
-
-      c.fillStyle = '#f3c623';
-      drawSketchPolygonCircle(c, -26, -18, 16, 10, 710, 2);
-      c.fill();
-      c.fillStyle = '#000';
-      c.beginPath();
-      c.arc(-26 + jitter(711, 2), -18 + jitter(712, 2), 4, 0, Math.PI * 2);
-      c.fill();
-
-      c.fillStyle = '#ff3b3b';
-      drawSketchPolygonCircle(c, 26, -16, 13, 9, 720, 2.5);
-      c.fill();
-      c.fillStyle = '#000';
-      c.beginPath();
-      c.arc(26 + jitter(721, 2), -16 + jitter(722, 2), 3.5, 0, Math.PI * 2);
-      c.fill();
-
-      c.fillStyle = '#111';
-      c.strokeStyle = '#ff3b3b';
-      c.lineWidth = 4;
-      c.fillRect(-32, 16, 64, 30);
-      c.strokeRect(-32, 16, 64, 30);
-
-      c.strokeStyle = '#ffffff';
-      c.lineWidth = 2;
-      for (let tx = -24; tx <= 24; tx += 10) {
-        drawSketchLine(c, tx, 18, tx - 2, 29, tx, 1.2);
-        drawSketchLine(c, tx, 44, tx + 2, 33, tx + 5, 1.2);
-      }
-
-      c.restore();
-
-      c.fillStyle = '#ff3b3b';
-      c.font = `bold ${Math.round(24 * scale)}px "Comic Sans MS", "Chalkboard SE", cursive`;
-      c.textAlign = 'center';
-      c.fillText(state.arenaScareText, cx, by + boxH + 34 * scale, CW - 30);
-      c.restore();
-    }
-
-    // =========================================================================
-    // 10. FINE PARTITA FULLSCREEN: JUMP SCARE + IMPICCATO / VITTORIA
-    // =========================================================================
-    let endAnimFrame = null;
-
-    function triggerGameOver(won, reasonText) {
-      state.phase = 'ended';
-      state.won = won;
-      state.endReasonText = reasonText;
-      joy.active = false;
-      joy.source = null;
-      prepOverlay.classList.remove('visible');
-      audio.stopMusic();
-
-      endOverlay.classList.add('visible');
-      endInfo.classList.remove('visible');
-      endWord.textContent = state.word;
-      endClue.textContent = `"${state.wordObj.hint}"`;
-
-      if (won) {
-        audio.playVictory();
-        startVictoryAnimation();
-      } else {
-        audio.playJumpScare(true);
-        try { if (navigator.vibrate) navigator.vibrate([200, 50, 200, 50, 300]); } catch (e) {}
-        startTrashJumpScareThenHangman();
-      }
-    }
-
-    function startTrashJumpScareThenHangman() {
-      let elapsed = 0;
-      const scareDuration = 1.15;
-      let lastT = performance.now();
-      if (endAnimFrame) cancelAnimationFrame(endAnimFrame);
-
-      function step(now) {
-        const dt = (now - lastT) / 1000;
-        lastT = now;
-        elapsed += dt;
-        state.sketchSeed = Math.random() * 1000;
-
-        if (elapsed < scareDuration) {
-          const flash = Math.floor(elapsed * 24) % 2 === 0;
-          endOverlay.style.background = flash ? '#2b0000' : '#000000';
-
-          endCtx.save();
-          endCtx.fillStyle = flash ? '#1a0000' : '#050505';
-          endCtx.fillRect(0, 0, endCanvas.width, endCanvas.height);
-
-          const zoom = 0.65 + (elapsed / scareDuration) * 0.9;
-          endCtx.translate(endCanvas.width / 2 + (Math.random() - 0.5) * 18, endCanvas.height / 2 + (Math.random() - 0.5) * 18);
-          endCtx.scale(zoom, zoom);
-
-          endCtx.strokeStyle = '#ff2e2e';
-          endCtx.fillStyle = '#8b0000';
-          endCtx.lineWidth = 6;
-          drawSketchPolygonCircle(endCtx, 0, 0, 110, 13, 1, 14);
-          endCtx.fill();
-
-          endCtx.fillStyle = '#ffeb3b';
-          endCtx.beginPath();
-          endCtx.arc(-40, -25, 24, 0, Math.PI * 2);
-          endCtx.arc(40, -25, 24, 0, Math.PI * 2);
-          endCtx.fill();
-          endCtx.fillStyle = '#000';
-          endCtx.beginPath();
-          endCtx.arc(-40, -25, 8, 0, Math.PI * 2);
-          endCtx.arc(40, -25, 8, 0, Math.PI * 2);
-          endCtx.fill();
-
-          endCtx.fillStyle = '#000';
-          endCtx.beginPath();
-          endCtx.ellipse(0, 42, 62, 38, 0, 0, Math.PI * 2);
-          endCtx.fill();
-
-          endCtx.fillStyle = '#fff';
-          for (let t = -48; t <= 48; t += 16) {
-            endCtx.beginPath();
-            endCtx.moveTo(t - 6, 10);
-            endCtx.lineTo(t, 32);
-            endCtx.lineTo(t + 6, 10);
-            endCtx.fill();
-          }
-
-          endCtx.fillStyle = '#ffeb3b';
-          endCtx.font = 'bold 30px "Comic Sans MS", cursive';
-          endCtx.textAlign = 'center';
-          endCtx.fillText('TI HO PRESO!!', 0, -120);
-          endCtx.restore();
-
-          endAnimFrame = requestAnimationFrame(step);
-        } else {
-          endOverlay.style.background = 'rgba(0,0,0,0.96)';
-          endTitle.textContent = 'SEI STATO IMPICCATO!';
-          endTitle.style.color = '#ff4d4d';
-          endReason.textContent = state.endReasonText;
-          endInfo.classList.add('visible');
-          animateHangmanFinale();
-        }
-      }
-      endAnimFrame = requestAnimationFrame(step);
-    }
-
-    function animateHangmanFinale() {
-      let progress = 0;
-      let lastT = performance.now();
-
-      function drawFinale(now) {
-        const dt = (now - lastT) / 1000;
-        lastT = now;
-        progress += dt;
-        state.sketchSeed += dt * 10;
-
-        endCtx.fillStyle = '#0b0b0b';
-        endCtx.fillRect(0, 0, endCanvas.width, endCanvas.height);
-
-        const cx = endCanvas.width / 2;
-        const sway = Math.sin(progress * 2.5) * 0.08;
-
-        endCtx.strokeStyle = '#999';
-        endCtx.lineWidth = 4;
-        drawSketchLine(endCtx, cx - 120, 300, cx + 20, 300, 10, 1.5);
-        drawSketchLine(endCtx, cx - 75, 300, cx - 75, 45, 20, 1.5);
-        drawSketchLine(endCtx, cx - 75, 45, cx + 35, 45, 30, 1.5);
-        drawSketchLine(endCtx, cx - 75, 95, cx - 30, 45, 40, 1.5);
-
-        endCtx.save();
-        endCtx.translate(cx + 35, 45);
-        endCtx.rotate(sway);
-
-        endCtx.strokeStyle = '#b89f35';
-        endCtx.lineWidth = 2.5;
-        drawSketchLine(endCtx, 0, 0, 0, 52, 50, 1.0);
-
-        const step = Math.min(1, progress / 0.8);
-        endCtx.strokeStyle = '#ffffff';
-        endCtx.lineWidth = 3;
-
-        if (step > 0.1) {
-          drawSketchPolygonCircle(endCtx, 0, 74, 22, 12, 60, 1.4);
-          endCtx.strokeStyle = '#ff4d4d';
-          endCtx.lineWidth = 2.2;
-          drawSketchLine(endCtx, -11, 66, -4, 73, 61, 0.8);
-          drawSketchLine(endCtx, -4, 66, -11, 73, 62, 0.8);
-          drawSketchLine(endCtx, 4, 66, 11, 73, 63, 0.8);
-          drawSketchLine(endCtx, 11, 66, 4, 73, 64, 0.8);
-          endCtx.fillStyle = '#e74c3c';
-          endCtx.beginPath();
-          endCtx.ellipse(4, 88, 5, 8, 0.2, 0, Math.PI * 2);
-          endCtx.fill();
-        }
-
-        endCtx.strokeStyle = '#ffffff';
-        endCtx.lineWidth = 3;
-        if (step > 0.35) drawSketchLine(endCtx, 0, 96, 0, 166, 70, 1.5);
-        if (step > 0.55) {
-          drawSketchLine(endCtx, 0, 110, -24, 148, 75, 1.5);
-          drawSketchLine(endCtx, 0, 110, 24, 148, 80, 1.5);
-        }
-        if (step > 0.8) {
-          drawSketchLine(endCtx, 0, 166, -18, 220, 85, 1.5);
-          drawSketchLine(endCtx, 0, 166, 18, 220, 90, 1.5);
-        }
-
-        endCtx.restore();
-
-        endCtx.fillStyle = '#e74c3c';
-        endCtx.font = 'bold 20px "Comic Sans MS", cursive';
-        endCtx.fillText('R.I.P.', cx + 115, 130);
-        endCtx.fillStyle = '#777';
-        endCtx.font = '14px "Comic Sans MS", cursive';
-        endCtx.fillText('(colpa tua)', cx + 115, 155);
-
-        endAnimFrame = requestAnimationFrame(drawFinale);
-      }
-      endAnimFrame = requestAnimationFrame(drawFinale);
-    }
-
-    function startVictoryAnimation() {
-      endOverlay.style.background = 'rgba(0,0,0,0.95)';
-      endTitle.textContent = 'SEI SOPRAVVISSUTO PER MIRACOLO!';
-      endTitle.style.color = '#2ecc71';
-      endReason.textContent = state.endReasonText;
-      endInfo.classList.add('visible');
-
-      let t = 0;
-      let lastT = performance.now();
-      if (endAnimFrame) cancelAnimationFrame(endAnimFrame);
-
-      function drawWin(now) {
-        const dt = (now - lastT) / 1000;
-        lastT = now;
-        t += dt;
-        state.sketchSeed += dt * 10;
-
-        endCtx.fillStyle = '#0b0b0b';
-        endCtx.fillRect(0, 0, endCanvas.width, endCanvas.height);
-
-        const cx = endCanvas.width / 2;
-        const jump = Math.abs(Math.sin(t * 5)) * 28;
-
-        endCtx.save();
-        endCtx.translate(cx - 50, 210 - jump);
-        endCtx.strokeStyle = '#2ecc71';
-        endCtx.lineWidth = 3;
-        drawSketchPolygonCircle(endCtx, 0, -40, 20, 12, 1, 1.4);
-        drawSketchLine(endCtx, 0, -20, 0, 35, 2, 1.3);
-        drawSketchLine(endCtx, 0, -5, -28, -32, 3, 1.4);
-        drawSketchLine(endCtx, 0, -5, 28, -32, 4, 1.4);
-        drawSketchLine(endCtx, 0, 35, -18, 72, 5, 1.4);
-        drawSketchLine(endCtx, 0, 35, 18, 72, 6, 1.4);
-        endCtx.fillStyle = '#fff';
-        endCtx.beginPath();
-        endCtx.arc(-6, -44, 2.5, 0, Math.PI * 2);
-        endCtx.arc(6, -44, 2.5, 0, Math.PI * 2);
-        endCtx.fill();
-        endCtx.restore();
-
-        endCtx.save();
-        endCtx.translate(cx + 120, 240);
-        endCtx.strokeStyle = '#e74c3c';
-        endCtx.lineWidth = 2.5;
-        drawSketchPolygonCircle(endCtx, 0, 0, 28, 12, 99, 2.5);
-        endCtx.fillStyle = '#ffeb3b';
-        endCtx.font = 'bold 14px "Comic Sans MS", cursive';
-        endCtx.fillText('T_T', -12, 5);
-        endCtx.fillStyle = '#aaa';
-        endCtx.fillText('uffa...', -18, -38);
-        endCtx.restore();
-
-        endCtx.fillStyle = '#ffcc00';
-        endCtx.font = 'bold 24px "Comic Sans MS", cursive';
-        endCtx.textAlign = 'center';
-        endCtx.fillText('VITTORIA TRASH!', cx, 55);
-
-        endAnimFrame = requestAnimationFrame(drawWin);
-      }
-      endAnimFrame = requestAnimationFrame(drawWin);
-    }
-
-    // =========================================================================
-    // 11. AVVIO & MAIN LOOP
-    // =========================================================================
-    buildSidebarKeyboard();
-    drawGallowsPreview();
-
-    function gameLoop(timestamp) {
-      if (!state.lastTime) state.lastTime = timestamp;
-      const dt = Math.min(0.05, (timestamp - state.lastTime) / 1000);
-      state.lastTime = timestamp;
-
-      update(dt);
-      renderArena();
-      renderTrackpad();
-
-      requestAnimationFrame(gameLoop);
-    }
-
-    requestAnimationFrame(gameLoop);
-  </script>
-</body>
-</html>
-```
-
-Una volta fatto **Commit changes**, aspetta 1 minuto e prova dal telefono su **`https://beamorgan200021-sudo.github.io/impiccato/?v=4`**!
+      const boxH

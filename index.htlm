@@ -1,0 +1,2708 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>L'Impiccato dell'Omino Scemo - Horror Trash</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: #0d0d0d;
+      color: #e5e5e5;
+      font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', cursive, sans-serif;
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow-x: hidden;
+      overscroll-behavior: none;
+    }
+
+    button {
+      touch-action: manipulation;
+    }
+
+    .game-wrapper {
+      width: 100%;
+      max-width: 1120px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .top-quarter {
+      display: contents;
+    }
+
+    .panel-box {
+      background-color: #161616;
+      border: 2px solid #e5e5e5;
+      border-radius: 18px;
+    }
+
+    .top-header {
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .brand-title {
+      color: #f3c623;
+      font-size: 23px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      margin: 0;
+      text-transform: uppercase;
+    }
+
+    .brand-pill {
+      font-size: 12px;
+      color: #cccccc;
+      border: 1px solid #666;
+      background: #111;
+      border-radius: 999px;
+      padding: 4px 12px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hearts-pill {
+      background: #111;
+      border: 1.5px solid #555;
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 16px;
+      letter-spacing: 2px;
+    }
+
+    .audio-btn {
+      background: #242424;
+      color: #ffffff;
+      border: 1.5px solid #cccccc;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .audio-btn:hover { background: #333; }
+
+    .new-word-btn {
+      background: #7f1d1d;
+      color: #ffffff;
+      border: 1.5px solid #ff6b6b;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .new-word-btn:hover { background: #991b1b; }
+
+    .hud-panel {
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .word-section {
+      flex: 1 1 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .hud-subtitle {
+      font-size: 11px;
+      color: #b5b5b5;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .hint-inline {
+      font-size: 12px;
+      color: #f3c623;
+      display: none;
+    }
+    .hint-inline.visible { display: block; }
+
+    .word-boxes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      min-height: 44px;
+      align-items: center;
+    }
+
+    .letter-tile {
+      width: 36px;
+      height: 42px;
+      background-color: #1e1e1e;
+      border: 1.5px solid #555;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
+      color: #ffffff;
+      transition: transform 0.15s ease, border-color 0.2s ease;
+    }
+
+    .letter-tile.empty { color: #666; }
+    .letter-tile.facile-ghost { color: #777; border-color: #444; }
+    .letter-tile.collected { color: #2ecc71; border-color: #2ecc71; transform: scale(1.05); }
+    .letter-tile.prefilled { color: #ffcc00; border-color: #b89f35; }
+
+    .stats-row {
+      display: flex;
+      align-items: stretch;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .stat-box {
+      background-color: #121212;
+      border: 1.5px solid #444;
+      border-radius: 10px;
+      padding: 6px 14px;
+      min-width: 118px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      color: #aaa;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .stat-value {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .val-red { color: #ff4d4d; }
+    .val-yellow { color: #ffcc00; }
+    .val-green { color: #2ecc71; }
+    .val-cyan { color: #3498db; }
+
+    .mobile-time-box,
+    .mobile-gallows-card,
+    .mobile-status-bar,
+    .sb-trackpad {
+      display: none;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 290px;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .arena-panel {
+      position: relative;
+      overflow: hidden;
+      background-color: #0a0a0a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 460px;
+    }
+
+    canvas#arenaCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background-color: #0a0a0a;
+      touch-action: none;
+    }
+
+    .sidebar-panel {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      justify-content: space-between;
+    }
+
+    .sidebar-section-title {
+      font-size: 11px;
+      color: #b5b5b5;
+      text-align: center;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .gallows-box {
+      background: #0a0a0a;
+      border: 1.5px solid #3d3d3d;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    canvas#gallowsCanvas {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .diary-box {
+      background: #111111;
+      border: 1.5px solid #3d3d3d;
+      border-radius: 12px;
+      padding: 8px 10px;
+      height: 138px;
+      overflow-y: auto;
+      font-size: 11.5px;
+      line-height: 1.38;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .diary-entry { color: #f3c623; }
+    .diary-entry.danger { color: #ff6b6b; }
+    .diary-entry.good { color: #2ecc71; }
+    .diary-entry.info { color: #dcdcdc; }
+
+    .keyboard-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+
+    .key-btn {
+      background: #1b1b1b;
+      color: #e5e5e5;
+      border: 1.5px solid #4d4d4d;
+      border-radius: 6px;
+      padding: 6px 0;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.1s ease, border-color 0.1s ease;
+    }
+    .key-btn:hover:not(:disabled) {
+      border-color: #ffcc00;
+      background: #292929;
+    }
+    .key-btn.used-good {
+      background: #143d26;
+      border-color: #2ecc71;
+      color: #2ecc71;
+      cursor: default;
+    }
+    .key-btn.used-bad {
+      background: #3d1414;
+      border-color: #ff4d4d;
+      color: #ff4d4d;
+      opacity: 0.6;
+      cursor: default;
+    }
+
+    .trackpad-box {
+      background: #0a0a0a;
+      border: 1.5px solid #555;
+      border-radius: 12px;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+    }
+
+    canvas#trackpadCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+    }
+
+    .prep-overlay {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(18, 18, 18, 0.95);
+      border: 2px solid #ffcc00;
+      border-radius: 14px;
+      padding: 8px 14px;
+      text-align: center;
+      z-index: 6;
+      display: none;
+      width: 90%;
+      max-width: 480px;
+    }
+    .prep-overlay.visible { display: block; }
+    .prep-overlay p {
+      margin: 0 0 6px;
+      font-size: 12.5px;
+      color: #ffcc00;
+    }
+    .prep-skip-btn {
+      background: #ffffff;
+      color: #000000;
+      border: none;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-family: inherit;
+      font-weight: bold;
+      font-size: 12.5px;
+      cursor: pointer;
+    }
+    .prep-skip-btn:hover { background: #ffcc00; }
+
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(5, 5, 5, 0.82);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      z-index: 20;
+      overflow-y: auto;
+    }
+    .modal-backdrop.hidden { display: none; }
+
+    .modal-card {
+      background-color: #141414;
+      border: 2px solid #e5e5e5;
+      border-radius: 16px;
+      padding: 18px 20px;
+      max-width: 560px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.95);
+    }
+
+    .modal-title {
+      color: #ff6b6b;
+      font-size: 18px;
+      font-weight: bold;
+      margin: 0 0 8px;
+      text-transform: uppercase;
+      line-height: 1.25;
+    }
+
+    .modal-desc {
+      font-size: 12.5px;
+      color: #d8d8d8;
+      line-height: 1.45;
+      margin: 0 0 12px;
+    }
+
+    .modal-desc strong { color: #f3c623; }
+
+    .controls-box {
+      border: 1.5px dashed #666;
+      border-radius: 10px;
+      padding: 9px 12px;
+      margin-bottom: 12px;
+      font-size: 11.5px;
+      color: #cccccc;
+      background: #101010;
+      text-align: left;
+      line-height: 1.5;
+    }
+
+    .controls-box .c-yellow { color: #f3c623; font-weight: bold; }
+    .controls-box .c-red { color: #ff6b6b; font-weight: bold; }
+    .controls-box .c-green { color: #2ecc71; font-weight: bold; }
+
+    .difficulty-selector {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .diff-btn {
+      background: #1e1e1e;
+      color: #ccc;
+      border: 1.5px solid #555;
+      border-radius: 10px;
+      padding: 9px 6px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .diff-btn.active {
+      background: #2b2b2b;
+      color: #ffcc00;
+      border-color: #ffcc00;
+    }
+    .diff-btn[data-diff="estremo"].active {
+      border-color: #ff4d4d;
+      color: #ff6b6b;
+    }
+
+    .start-btn {
+      background: #ffffff;
+      color: #000000;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 24px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.1s ease, background 0.15s ease;
+    }
+    .start-btn:hover {
+      background: #ffcc00;
+      transform: scale(1.03);
+    }
+
+    .fullscreen-overlay {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 999;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      text-align: center;
+    }
+    .fullscreen-overlay.visible { display: flex; }
+
+    canvas#endCanvas {
+      max-width: 100%;
+      height: auto;
+      border: 2px solid #e5e5e5;
+      border-radius: 16px;
+      background: #0b0b0b;
+    }
+
+    .end-info {
+      margin-top: 14px;
+      max-width: 540px;
+      display: none;
+    }
+    .end-info.visible { display: block; }
+    .end-info h2 { margin: 0 0 6px; font-size: 24px; }
+    .end-info p { margin: 4px 0 12px; color: #ccc; font-size: 14px; }
+    .end-word {
+      color: #ffcc00;
+      font-size: 20px;
+      font-weight: bold;
+      letter-spacing: 3px;
+    }
+
+    @media (max-width: 900px), (hover: none) and (pointer: coarse) {
+      .game-wrapper {
+        height: 100dvh;
+        max-width: 100%;
+        padding: 6px;
+        gap: 6px;
+        display: grid;
+        grid-template-rows: minmax(0, 25fr) minmax(0, 50fr) minmax(0, 25fr);
+        overflow: hidden;
+      }
+
+      .top-quarter {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background-color: #161616;
+        border: 2px solid #e5e5e5;
+        border-radius: 14px;
+        padding: 5px 8px;
+        gap: 4px;
+        overflow: hidden;
+      }
+
+      .top-header {
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        padding: 0;
+        gap: 6px;
+        flex-wrap: nowrap;
+      }
+      .brand-title {
+        font-size: 12.5px;
+        white-space: nowrap;
+      }
+      .brand-pill { display: none; }
+      .header-actions { gap: 5px; }
+      .hearts-pill { font-size: 12px; padding: 2px 7px; }
+      .audio-btn, .new-word-btn { font-size: 11px; padding: 3px 8px; }
+
+      .hud-panel {
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        padding: 0;
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: 1fr 94px;
+        gap: 8px;
+        align-items: stretch;
+      }
+
+      .hud-subtitle,
+      .stats-row {
+        display: none;
+      }
+
+      .word-section {
+        min-width: 0;
+        justify-content: space-between;
+        gap: 3px;
+      }
+
+      .hint-inline {
+        font-size: 10.5px;
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .word-boxes {
+        min-height: 0;
+        gap: 3px;
+        align-content: center;
+      }
+
+      .letter-tile {
+        width: 24px;
+        height: 28px;
+        font-size: 14px;
+        border-radius: 6px;
+      }
+
+      .mobile-time-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background-color: #121212;
+        border: 1.5px solid #444;
+        border-radius: 8px;
+        padding: 3px 8px;
+      }
+      .mobile-time-box .stat-label {
+        font-size: 9px;
+      }
+      .mobile-time-box .stat-value {
+        font-size: 14px;
+      }
+
+      .mobile-gallows-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background: #0a0a0a;
+        border: 1.5px solid #444;
+        border-radius: 10px;
+        padding: 3px 4px 4px;
+        overflow: hidden;
+      }
+      canvas#mobileGallowsCanvas {
+        display: block;
+        width: 100%;
+        flex: 1;
+        min-height: 0;
+      }
+      .mobile-errors-text {
+        text-align: center;
+        font-size: 10.5px;
+        font-weight: bold;
+        color: #ff4d4d;
+        line-height: 1.1;
+        padding-top: 2px;
+      }
+
+      .main-grid {
+        display: contents;
+      }
+      .arena-panel {
+        min-height: 0;
+        height: 100%;
+        width: 100%;
+        border-radius: 14px;
+      }
+
+      .sidebar-panel {
+        min-height: 0;
+        height: 100%;
+        border-radius: 14px;
+        padding: 6px 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .sb-gallows,
+      .sb-diary,
+      .sb-keyboard {
+        display: none;
+      }
+
+      .mobile-status-bar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background-color: #121212;
+        border: 1.5px solid #444;
+        border-radius: 8px;
+        padding: 3px 10px;
+      }
+      .mobile-status-bar .stat-label {
+        font-size: 9.5px;
+      }
+      .mobile-status-bar .stat-value {
+        font-size: 12.5px;
+      }
+
+      .sb-trackpad {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+      }
+      .sb-trackpad .sidebar-section-title {
+        display: none;
+      }
+      .trackpad-box {
+        flex: 1;
+        min-height: 0;
+        height: 100%;
+        border-radius: 10px;
+      }
+
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 900;
+        padding: 14px;
+      }
+      .modal-card { padding: 16px 14px; }
+      .modal-title { font-size: 15px; }
+      .difficulty-selector { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="game-wrapper">
+    <div class="top-quarter">
+      <div class="panel-box top-header">
+        <div class="brand-group">
+          <h1 class="brand-title">L'IMPICCATO DELL'OMINO SCEMO</h1>
+          <span class="brand-pill">grafica fatta malissimo col mouse</span>
+        </div>
+        <div class="header-actions">
+          <span class="hearts-pill" id="heartsDisplay" title="Vite rimaste">❤️❤️❤️</span>
+          <button class="audio-btn" id="muteBtn">🔊 Audio: ON</button>
+          <button class="new-word-btn" id="newWordBtn">↻ Nuova</button>
+        </div>
+      </div>
+
+      <div class="panel-box hud-panel">
+        <div class="word-section">
+          <div class="hud-subtitle">
+            PAROLA MALEDETTA DA SCOPRIRE (RACCOGLI LE LETTERE IN GIRO O DIGITA SULLA TASTIERA)
+          </div>
+          <div class="hint-inline" id="hintInline"></div>
+          <div class="word-boxes" id="wordBoxes"></div>
+
+          <div class="mobile-time-box">
+            <span class="stat-label">TEMPO RIMASTO</span>
+            <span class="stat-value val-yellow" id="mobileTimerVal">75s</span>
+          </div>
+        </div>
+
+        <div class="mobile-gallows-card">
+          <canvas id="mobileGallowsCanvas" width="120" height="86"></canvas>
+          <div class="mobile-errors-text" id="mobileErrorsVal">0 / 6 ERRORI</div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-box">
+            <span class="stat-label">ERRORI FORCA</span>
+            <span class="stat-value val-red" id="errorsVal">0 / 6</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">TEMPO RIMASTO</span>
+            <span class="stat-value val-yellow" id="timerVal">75s</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">STATO OMINO</span>
+            <span class="stat-value val-green" id="statusVal">Ignaro (per ora)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-grid">
+      <div class="panel-box arena-panel">
+        <canvas id="arenaCanvas" width="780" height="480"></canvas>
+
+        <div class="prep-overlay" id="prepOverlay">
+          <p id="prepText">FASE PREPARATORIA: 30s — Ragiona sull'indizio! Il mostro è fermo.</p>
+          <button class="prep-skip-btn" id="prepSkipBtn">Ho capito, inizia subito!</button>
+        </div>
+
+        <div class="modal-backdrop" id="startModal">
+          <div class="modal-card">
+            <h2 class="modal-title">ATTENZIONE: JUMP SCARE STUPIDI &amp; SUONI IMPROVVISI</h2>
+            <p class="modal-desc">
+              Guida l'omino disegnato malissimo col mouse in questo posto buio e ridicolo. Raccogli le <strong>sfere con le lettere</strong> (su PC puoi anche usare la tastiera) per completare la parola prima che scada il tempo, finiscano i 3 cuori o la forca si completi.
+            </p>
+
+            <div class="controls-box">
+              <div>• <span class="c-yellow">Muoviti:</span> WASD / Frecce su PC, oppure usa il <strong>Trackpad</strong> in basso su telefono/tablet.</div>
+              <div>• <span class="c-red">Sfere ? rosse:</span> 50% aiuto reale, 35% solo jump scare stupido, 15% svantaggi!</div>
+              <div>• <span class="c-green">Se perdi:</span> l'omino viene catturato e impiccato sul serio (con grafica trash).</div>
+            </div>
+
+            <div class="difficulty-selector" id="diffSelector">
+              <button class="diff-btn active" data-diff="facile">Facile</button>
+              <button class="diff-btn" data-diff="medio">Medio</button>
+              <button class="diff-btn" data-diff="difficile">Difficile</button>
+              <button class="diff-btn" data-diff="estremo">Estremo</button>
+            </div>
+
+            <button class="start-btn" id="startBtn">▶ INIZIA A RISCHIARE LA PELLE</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-box sidebar-panel">
+        <div class="sb-gallows">
+          <div class="sidebar-section-title">LA FORCA INCOMBENTE</div>
+          <div class="gallows-box">
+            <canvas id="gallowsCanvas" width="260" height="145"></canvas>
+          </div>
+        </div>
+
+        <div class="sb-diary">
+          <div class="sidebar-section-title">DIARIO DELL'ORRORE STUPIDO</div>
+          <div class="diary-box" id="diaryBox">
+            <div class="diary-entry info">• In attesa che l'omino entri nel buio...</div>
+          </div>
+        </div>
+
+        <div class="sb-keyboard">
+          <div class="sidebar-section-title">OPPURE PROVA UNA LETTERA AL VOLO</div>
+          <div class="keyboard-grid" id="keyboardGrid"></div>
+        </div>
+
+        <div class="mobile-status-bar">
+          <span class="stat-label">STATO OMINO:</span>
+          <span class="stat-value val-green" id="mobileStatusVal">Ignaro (per ora)</span>
+        </div>
+
+        <div class="sb-trackpad">
+          <div class="sidebar-section-title">TRACKPAD MOVIMENTO</div>
+          <div class="trackpad-box">
+            <canvas id="trackpadCanvas" width="320" height="160"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fullscreen-overlay" id="endOverlay">
+    <canvas id="endCanvas" width="520" height="340"></canvas>
+    <div class="end-info" id="endInfo">
+      <h2 id="endTitle">SEI MORTO MALE!</h2>
+      <p id="endReason"></p>
+      <div>Parola maledetta: <span class="end-word" id="endWord"></span></div>
+      <p id="endClue" style="font-style: italic; color: #f3c623;"></p>
+      <button class="start-btn" id="retryBtn">↻ RIPROVA A SOPRAVVIVERE</button>
+    </div>
+  </div>
+
+  <script>
+    const CURATED_WORDS = [
+      { word: "FRIGORIFERO", hint: "Scatola fredda che apri ogni 5 minuti sperando che compaia cibo nuovo." },
+      { word: "COINCIDENZA", hint: "Quando il treno parte esattamente 12 secondi prima che arrivi tu." },
+      { word: "ZANZARA", hint: "Insetto vampiro che ronza solo vicino al tuo orecchio alle 3 di notte." },
+      { word: "BOLLETTA", hint: "Foglio di carta capace di causare un infarto istantaneo." },
+      { word: "LAVORO", hint: "Attivita che ti ruba 8 ore al giorno per comprare cose che non usi." },
+      { word: "TAPPARELLA", hint: "Strumento rumoroso che si incastra sempre dal lato sbagliato." },
+      { word: "CIPOLLA", hint: "L'unica verdura capace di farti piangere piu di un film drammatico." },
+      { word: "MATERASSO", hint: "Posto dove ricordi tutte le figuracce fatte nel 2014." },
+      { word: "ASCENSORE", hint: "Stanza minuscola dove fissare le proprie scarpe per evitare sguardi." },
+      { word: "OMBRELLO", hint: "Oggetto che dimentichi quando piove e rompi al primo soffio di vento." },
+      { word: "DENTISTA", hint: "Persona che ti fa domande mentre hai quattro attrezzi in bocca." },
+      { word: "SUOCERA", hint: "Boss finale di ogni relazione sentimentale, livello incubo." },
+      { word: "SVEGLIA", hint: "Strumento di tortura legale che suona sempre troppo presto." },
+      { word: "TRAFFICO", hint: "Parcheggio gratuito su una strada a scorrimento veloce." },
+      { word: "PARCHEGGIO", hint: "Miraggio urbano che sparisce appena avvicini l'auto." },
+      { word: "SPAGHETTI", hint: "Fili di pasta che schizzano sugo solo sulle magliette bianche." },
+      { word: "STAMPANTE", hint: "Macchina che percepisce la tua fretta e si rifiuta di funzionare." },
+      { word: "BATTERIA", hint: "Cosa che scende al 1% esatto quando aspetti una chiamata importante." },
+      { word: "MOSCERINO", hint: "Essere minuscolo che sceglie di morire dentro il tuo occhio." },
+      { word: "POLTRONA", hint: "Trappola morbida dalla quale e fisicamente impossibile alzarsi." },
+      { word: "CUSCINO", hint: "Oggetto che ha sempre un lato fresco e uno caldissimo." },
+      { word: "CALZINO", hint: "Indumento che entra in lavatrice in coppia ed esce vedovo." },
+      { word: "DIETA", hint: "Progetto eroico che inizia sempre lunedi prossimo." },
+      { word: "SCADENZA", hint: "Data magica che si avvicina alla velocita della luce." },
+      { word: "CORRIERE", hint: "Ninja invisibile che suona il citofono per 0.2 secondi e scappa." },
+      { word: "SEMAFORO", hint: "Lampada stradale programmata per diventare rossa appena ti vede." },
+      { word: "CARRELLO", hint: "Veicolo da supermercato con almeno una ruota posseduta dal demonio." },
+      { word: "TELECOMANDO", hint: "Oggetto capace di teletrasportarsi dentro i cuscini del divano." },
+      { word: "SPUGNA", hint: "Oggetto per pulire che dopo tre giorni e piu sporco dei piatti." },
+      { word: "SCONTRINO", hint: "Papiro inutile lungo due metri per aver comprato una gomma." },
+      { word: "AUTOBUS", hint: "Mezzo che passa tre volte di fila solo quando non ti serve." },
+      { word: "STIPENDIO", hint: "Ospite timido che arriva il 27 e sparisce gia il 28." },
+      { word: "PIGIAMA", hint: "Abito da cerimonia ufficiale per chi lavora da casa." },
+      { word: "SPECCHIO", hint: "Oggetto offensivo che al mattino non ha nessuna pieta." },
+      { word: "FORBICI", hint: "Oggetto venduto in confezioni sigillate che richiedono un altro paio per aprirsi." },
+      { word: "ASPIRAPOLVERE", hint: "Mostro rumoroso che terrorizza cani, gatti e coinquilini." },
+      { word: "RAFFREDDORE", hint: "Malattia che ti fa rimpiangere quando respiravi da due narici." },
+      { word: "SINGHIOZZO", hint: "Spam involontario del diaframma nel momento meno opportuno." },
+      { word: "SBADIGLIO", hint: "Virus altamente contagioso che si trasmette con uno sguardo." },
+      { word: "SOLLETICO", hint: "Tortura medievale che ti fa ridere contro la tua volonta." },
+      { word: "CAPELLI", hint: "Fili ribelli che stanno bene solo quando non devi uscire." },
+      { word: "PIZZERIA", hint: "Luogo sacro che salva la serata quando il frigo piange." },
+      { word: "GELATO", hint: "Dolce che si scioglie piu in fretta della tua dignita." },
+      { word: "CAFFE", hint: "Pozione nera senza la quale non sei tecnicamente un essere umano." },
+      { word: "BISCOTTO", hint: "Trappola friabile che cade nella tazza spezzandosi a meta." },
+      { word: "PANETTONE", hint: "Dolce natalizio che divide le famiglie piu dell'eredita." },
+      { word: "INSALATA", hint: "Pasto triste che mangi guardando chi ha ordinato la pizza." },
+      { word: "FORMAGGIO", hint: "Latte che ha deciso di migliorare invecchiando." },
+      { word: "PATATINE", hint: "Snack rumoroso impossibile da mangiare di nascosto al cinema." },
+      { word: "LIMONE", hint: "Frutto acido che ti schizza sempre esattamente in un occhio." },
+      { word: "PEPERONCINO", hint: "Spezia che ti fa pentire delle tue scelte di vita il giorno dopo." },
+      { word: "BROCCOLO", hint: "Piccolo albero verde odiato dai bambini di tutto il pianeta." },
+      { word: "CARCIOFO", hint: "Fiore corazzato che richiede 40 minuti di lavoro per tre bocconi." },
+      { word: "MELANZANA", hint: "Verdura spugnosa che beve un litro d'olio in quattro secondi." },
+      { word: "RAGNO", hint: "Coinquilino abusivo a otto zampe che non paga mai l'affitto." },
+      { word: "PICCIONE", hint: "Dinosauro urbano privo di rispetto per le auto appena lavate." },
+      { word: "GABBIANO", hint: "Teppista volante pronto a rubarti il panino in spiaggia." },
+      { word: "CANGURO", hint: "Topo gigante palestrato con la tasca incorporata." },
+      { word: "BRADIPO", hint: "Il tuo animale guida la domenica mattina." },
+      { word: "CHIHUAHUA", hint: "Concentrato di rabbia e tremore in due chili di cane." },
+      { word: "LUMACA", hint: "Creatura che viaggia sempre con la casa in spalla senza fretta." },
+      { word: "CAMALEONTE", hint: "Rettile perennemente indeciso sul proprio outfit." },
+      { word: "FANTASMA", hint: "Lenzuolo bucato che fa 'buuu' con voce stanca." },
+      { word: "SCHELETRO", hint: "Versione minimalista e croccante del corpo umano." },
+      { word: "VAMPIRO", hint: "Creatura pallida che evita il sole e l'aglio come uno sviluppatore." },
+      { word: "ZOMBIE", hint: "Pendolare del lunedi mattina prima del cappuccino." },
+      { word: "STREGA", hint: "Signora con cappello a punta esperta in pozioni e gatti neri." },
+      { word: "CIMITERO", hint: "Quartiere molto tranquillo con vicini silenziosissimi." },
+      { word: "BAMBOLA", hint: "Giocattolo innocente finche non muove gli occhi alle due di notte." },
+      { word: "SOFFITTA", hint: "Deposito polveroso pieno di scatoloni e presenze inquietanti." },
+      { word: "CANTINA", hint: "Stanza buia dei film horror dove scendono solo i protagonisti stupidi." },
+      { word: "CORRIDOIO", hint: "Tunnel buio che attraversi correndo dopo aver spento la luce." },
+      { word: "ARMADIO", hint: "Portale dimensionale per vestiti vecchi e mostri timidi." },
+      { word: "TECNICO", hint: "Mago misterioso che risolve il guasto appena arriva e ti guarda male." },
+      { word: "PASSWORD", hint: "Parola segreta che dimentichi tre minuti dopo averla cambiata." },
+      { word: "NOTIFICA", hint: "Suono breve che ti distrugge la concentrazione all'istante." },
+      { word: "TASTIERA", hint: "Pianoforte moderno pieno di briciole sotto i tasti." },
+      { word: "SCHERMO", hint: "Finestra luminosa che fissi per 12 ore al giorno." },
+      { word: "CUFFIE", hint: "Cavi dotati di intelligenza propria per annodarsi in tasca." },
+      { word: "MICROFONO", hint: "Oggetto sempre acceso proprio quando dici qualcosa di imbarazzante." },
+      { word: "VALIGIA", hint: "Scatola che sembra grande finche non provi a chiuderla." },
+      { word: "SPIAGGIA", hint: "Sabbia rovente che ritroverai nelle scarpe fino a dicembre." },
+      { word: "MONTAGNA", hint: "Posto dove cammini in salita per vedere cio che c'e anche in foto." },
+      { word: "TEMPORALE", hint: "Spettacolo gratuito di tuoni quando hai appena steso i panni." },
+      { word: "GRANDINE", hint: "Ghiaccio che cade dal cielo per testare la resistenza dei vetri." },
+      { word: "NEBBIA", hint: "Nuvola pigra che ha deciso di parcheggiarsi in strada." },
+      { word: "POLVERE", hint: "Decorazione domestica che ricompare cinque minuti dopo aver pulito." },
+      { word: "BRICIOLA", hint: "Frammento minuscolo capace di trasformare il letto in un campo minato." },
+      { word: "CARIE", hint: "Buco nero minuscolo che si nutre di caramelle e stipendio." },
+      { word: "RUGGINE", hint: "Trucco arancione che rovina tutto cio che dimentichi fuori." }
+    ];
+
+    const GEN_PREFIXES = [
+      { p: "SUPER", d: "Versione potenziata ed esagerata di" },
+      { p: "MEGA", d: "Versione gigante e incontrollabile di" },
+      { p: "ANTI", d: "Difesa leggendaria contro" },
+      { p: "IPER", d: "Concentrato estremo e nervoso di" },
+      { p: "MINI", d: "Versione tascabile ma comunque fastidiosa di" },
+      { p: "PSEUDO", d: "Imitazione scadente e sospetta di" },
+      { p: "TELE", d: "Versione a distanza o via cavo di" },
+      { p: "ULTRA", d: "Livello massimo e illegale di" },
+      { p: "CONTRO", d: "Rimedio disperato opposto a" }
+    ];
+
+    const GEN_VERBS = [
+      { v: "RUBA", d: "ruba di nascosto" },
+      { v: "MANGIA", d: "divora senza pieta" },
+      { v: "ROMPI", d: "distrugge sempre" },
+      { v: "SALVA", d: "protegge all'ultimo secondo" },
+      { v: "PORTA", d: "ti attira addosso" },
+      { v: "PERDI", d: "fa sparire nel nulla" },
+      { v: "CACCIA", d: "insegue urlando" },
+      { v: "GUASTA", d: "rovina sul piu bello" },
+      { v: "FERMA", d: "blocca sul posto" },
+      { v: "TAGLIA", d: "accorcia di netto" },
+      { v: "SVUOTA", d: "prosciuga completamente" },
+      { v: "SPACCA", d: "manda in frantumi" },
+      { v: "BRUCIA", d: "incenerisce all'istante" },
+      { v: "SALTA", d: "scavalca furbescamente" },
+      { v: "CONTA", d: "enumera fino allo sfinimento" },
+      { v: "TROVA", d: "scova anche al buio" },
+      { v: "CHIAMA", d: "evoca alle 3 di notte" },
+      { v: "SCANSA", d: "evita con maestria" }
+    ];
+
+    const GEN_NOUNS = [
+      { n: "SONNO", d: "il tuo prezioso sonno" },
+      { n: "PIZZA", d: "la pizza del sabato sera" },
+      { n: "SFIGA", d: "la sfortuna nera" },
+      { n: "FRIGO", d: "il frigorifero vuoto" },
+      { n: "ANSIA", d: "l'ansia esistenziale" },
+      { n: "SOLDI", d: "i pochi soldi sul conto" },
+      { n: "FESTE", d: "tutte le feste di compleanno" },
+      { n: "TEMPO", d: "il tempo che non basta mai" },
+      { n: "PAURA", d: "il terrore nel buio" },
+      { n: "DIETA", d: "la dieta iniziata lunedi" },
+      { n: "CHIAVI", d: "le chiavi di casa" },
+      { n: "CUORI", d: "le ultime vite rimaste" },
+      { n: "OMBRE", d: "le ombre inquietanti" },
+      { n: "SCUSE", d: "le scuse per fare tardi" },
+      { n: "TASSE", d: "le tasse impreviste" },
+      { n: "CENA", d: "la cena appena cucinata" },
+      { n: "SOGNI", d: "i sogni tranquilli" },
+      { n: "TASCA", d: "la tasca bucata" },
+      { n: "CODE", d: "le file alle poste" },
+      { n: "NOIA", d: "la noia mortale" }
+    ];
+
+    const GEN_ROOTS = [
+      { root: "RAGN", gender: "m", base: "ragno a otto zampe" },
+      { root: "GATT", gender: "m", base: "gatto che ti ignora" },
+      { root: "CUSC", gender: "m", base: "cuscino troppo caldo" },
+      { root: "CALZ", gender: "m", base: "calzino spaiato" },
+      { root: "MOSTR", gender: "m", base: "mostro scarabocchiato" },
+      { root: "FANTASM", gender: "m", base: "fantasma col lenzuolo" },
+      { root: "ZOMBI", gender: "m", base: "zombie del lunedi" },
+      { root: "PIZZ", gender: "f", base: "pizza bruciata ai bordi" },
+      { root: "ZANZAR", gender: "f", base: "zanzara delle tre di notte" },
+      { root: "BOLLETT", gender: "f", base: "bolletta salata" },
+      { root: "SVEGLI", gender: "f", base: "sveglia che suona presto" },
+      { root: "SUOCER", gender: "f", base: "suocera in visita a sorpresa" },
+      { root: "CIPOLL", gender: "f", base: "cipolla strappalacrime" },
+      { root: "STREG", gender: "f", base: "strega col gatto nero" },
+      { root: "SCIMM", gender: "f", base: "scimmia urlatrice" },
+      { root: "LUMAC", gender: "f", base: "lumaca lenta nel traffico" }
+    ];
+
+    const GEN_SUFFIXES = [
+      { m: "ONE", f: "ONA", d: "Versione gigante e ingombrante di:" },
+      { m: "INO", f: "INA", d: "Versione minuscola ma insidiosa di:" },
+      { m: "ACCIO", f: "ACCIA", d: "Versione brutta e cattivissima di:" },
+      { m: "ETTO", f: "ETTA", d: "Piccolo esemplare dispettoso di:" },
+      { m: "UCCIO", f: "UCCIA", d: "Versione triste e patetica di:" }
+    ];
+
+    const GEN_ADJS = [
+      { m: "PAZZO", f: "PAZZA", d: "completamente fuori di testa" },
+      { m: "NERO", f: "NERA", d: "oscuro come l'arena al buio" },
+      { m: "LENTO", f: "LENTA", d: "piu lento di un bradipo assonnato" },
+      { m: "SCEMO", f: "SCEMA", d: "con lo sguardo vuoto e stupido" },
+      { m: "TRASH", f: "TRASH", d: "disegnato malissimo col mouse" },
+      { m: "MATTO", f: "MATTA", d: "che ride da solo nel corridoio" },
+      { m: "ZOPPO", f: "ZOPPA", d: "che inciampa ad ogni passo" },
+      { m: "FREDDO", f: "FREDDA", d: "gelido come le mani del fantasma" }
+    ];
+
+    const usedWords = new Set();
+
+    function pickProceduralWord() {
+      for (let attempt = 0; attempt < 60; attempt++) {
+        const mode = Math.floor(Math.random() * 4);
+        let word = "";
+        let hint = "";
+
+        if (mode === 0) {
+          const v = GEN_VERBS[Math.floor(Math.random() * GEN_VERBS.length)];
+          const n = GEN_NOUNS[Math.floor(Math.random() * GEN_NOUNS.length)];
+          word = v.v + n.n;
+          hint = `Entita misteriosa che ${v.d} ${n.d}.`;
+        } else if (mode === 1) {
+          const pr = GEN_PREFIXES[Math.floor(Math.random() * GEN_PREFIXES.length)];
+          const base = CURATED_WORDS[Math.floor(Math.random() * CURATED_WORDS.length)];
+          word = pr.p + base.word;
+          hint = `${pr.d}: ${base.word.toLowerCase()} (${base.hint.charAt(0).toLowerCase() + base.hint.slice(1)})`;
+        } else if (mode === 2) {
+          const r = GEN_ROOTS[Math.floor(Math.random() * GEN_ROOTS.length)];
+          const s = GEN_SUFFIXES[Math.floor(Math.random() * GEN_SUFFIXES.length)];
+          const suf = r.gender === "m" ? s.m : s.f;
+          word = r.root + suf;
+          hint = `${s.d} ${r.base}.`;
+        } else {
+          const r = GEN_ROOTS[Math.floor(Math.random() * GEN_ROOTS.length)];
+          const a = GEN_ADJS[Math.floor(Math.random() * GEN_ADJS.length)];
+          const baseEnd = r.gender === "m" ? "O" : "A";
+          const adj = r.gender === "m" ? a.m : a.f;
+          word = r.root + baseEnd + adj;
+          hint = `Un ${r.base} ${a.d}.`;
+        }
+
+        if (/^[A-Z]{5,12}$/.test(word) && !usedWords.has(word)) {
+          usedWords.add(word);
+          return { word, hint };
+        }
+      }
+
+      const fallbackBase = CURATED_WORDS[Math.floor(Math.random() * CURATED_WORDS.length)];
+      const tagPool = ["BIS", "TER", "MAX", "PLUS", "ZERO", "MINI"];
+      for (const tag of tagPool) {
+        const w = (fallbackBase.word.slice(0, 8) + tag).slice(0, 12);
+        if (!usedWords.has(w)) {
+          usedWords.add(w);
+          return { word: w, hint: `Variante infinita di: ${fallbackBase.hint}` };
+        }
+      }
+      usedWords.clear();
+      return CURATED_WORDS[Math.floor(Math.random() * CURATED_WORDS.length)];
+    }
+
+    function getNextUnlimitedWord() {
+      const availableCurated = CURATED_WORDS.filter(c => !usedWords.has(c.word));
+      if (availableCurated.length > 0 && Math.random() < 0.58) {
+        const pick = availableCurated[Math.floor(Math.random() * availableCurated.length)];
+        usedWords.add(pick.word);
+        return pick;
+      }
+      return pickProceduralWord();
+    }
+
+    class HorrorAudio {
+      constructor() {
+        this.ctx = null;
+        this.master = null;
+        this.compressor = null;
+        this.unlocked = false;
+        this.muted = false;
+        this.musicTimer = null;
+        this.musicPlaying = false;
+        this.noteIndex = 0;
+        this.monsterDistanceRatio = 1;
+        this.melody = [440, 523.25, 493.88, 392, 440, 659.25, 587.33, 415.30];
+      }
+
+      init() {
+        try {
+          if ('audioSession' in navigator) {
+            navigator.audioSession.type = 'playback';
+          }
+        } catch (e) {}
+
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (!AudioCtx) return;
+          this.ctx = new AudioCtx();
+          this.master = this.ctx.createGain();
+          this.master.gain.value = 0.85;
+          this.compressor = this.ctx.createDynamicsCompressor();
+          this.master.connect(this.compressor);
+          this.compressor.connect(this.ctx.destination);
+        }
+        if (this.ctx.state === 'suspended' || this.ctx.state === 'interrupted') {
+          this.ctx.resume().catch(() => {});
+        }
+      }
+
+      unlock() {
+        this.init();
+        if (!this.ctx) return;
+        if (this.ctx.state !== 'running') {
+          this.ctx.resume().catch(() => {});
+        }
+        if (!this.unlocked) {
+          try {
+            const b = this.ctx.createBuffer(1, 1, 22050);
+            const src = this.ctx.createBufferSource();
+            src.buffer = b;
+            src.connect(this.ctx.destination);
+            src.start(0);
+            this.unlocked = true;
+          } catch (e) {}
+        }
+      }
+
+      toggleMute() {
+        this.muted = !this.muted;
+        if (!this.muted) this.unlock();
+        return this.muted;
+      }
+
+      startMusic() {
+        this.unlock();
+        if (this.musicPlaying) return;
+        this.musicPlaying = true;
+        this.scheduleNextNote();
+      }
+
+      stopMusic() {
+        this.musicPlaying = false;
+        if (this.musicTimer) {
+          clearTimeout(this.musicTimer);
+          this.musicTimer = null;
+        }
+      }
+
+      scheduleNextNote() {
+        if (!this.musicPlaying) return;
+        if (!this.muted && this.ctx) {
+          if (this.ctx.state !== 'running') this.ctx.resume().catch(() => {});
+          const baseFreq = this.melody[this.noteIndex % this.melody.length];
+          const detune = (Math.random() - 0.5) * 45 + (this.noteIndex % 3 === 0 ? -18 : 12);
+          this.playMusicBoxNote(baseFreq, detune);
+        }
+        this.noteIndex++;
+        const clamped = Math.max(0, Math.min(1, this.monsterDistanceRatio));
+        const delay = 175 + clamped * 490;
+        this.musicTimer = setTimeout(() => this.scheduleNextNote(), delay);
+      }
+
+      playMusicBoxNote(freq, detuneCents) {
+        if (!this.ctx || !this.master || this.muted) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const osc2 = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        const g2 = this.ctx.createGain();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, now);
+        osc.detune.setValueAtTime(detuneCents, now);
+
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(freq * 2, now);
+        osc2.detune.setValueAtTime(detuneCents * 1.5, now);
+
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.exponentialRampToValueAtTime(0.20, now + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+
+        g2.gain.value = 0.45;
+        osc.connect(gain);
+        osc2.connect(g2);
+        g2.connect(gain);
+        gain.connect(this.master);
+
+        osc.start(now);
+        osc2.start(now);
+        osc.stop(now + 0.58);
+        osc2.stop(now + 0.58);
+      }
+
+      playGoodLetter() {
+        if (!this.ctx || !this.master || this.muted) return;
+        const now = this.ctx.currentTime;
+        [523.25, 659.25, 783.99].forEach((f, i) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(f, now + i * 0.06);
+          gain.gain.setValueAtTime(0.24, now + i * 0.06);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.22);
+          osc.connect(gain);
+          gain.connect(this.master);
+          osc.start(now + i * 0.06);
+          osc.stop(now + i * 0.06 + 0.24);
+        });
+      }
+
+      playWrongLetter() {
+        if (!this.ctx || !this.master || this.muted) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(175, now);
+        osc.frequency.linearRampToValueAtTime(85, now + 0.28);
+        gain.gain.setValueAtTime(0.32, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        osc.connect(gain);
+        gain.connect(this.master);
+        osc.start(now);
+        osc.stop(now + 0.32);
+      }
+
+      playMysteryGood() {
+        if (!this.ctx || !this.master || this.muted) return;
+        const now = this.ctx.currentTime;
+        [440, 554, 659, 880].forEach((f, i) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(f, now + i * 0.05);
+          gain.gain.setValueAtTime(0.24, now + i * 0.05);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.05 + 0.18);
+          osc.connect(gain);
+          gain.connect(this.master);
+          osc.start(now + i * 0.05);
+          osc.stop(now + i * 0.05 + 0.2);
+        });
+      }
+
+      playJumpScare(heavy = false) {
+        if (!this.ctx || !this.master || this.muted) return;
+        const now = this.ctx.currentTime;
+        const dur = heavy ? 1.15 : 0.55;
+
+        const bufferSize = Math.floor(this.ctx.sampleRate * dur);
+        const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+        const noise = this.ctx.createBufferSource();
+        noise.buffer = buffer;
+
+        const shaper = this.ctx.createWaveShaper();
+        const curve = new Float32Array(256);
+        for (let i = 0; i < 256; i++) {
+          const x = (i * 2) / 256 - 1;
+          curve[i] = Math.tanh(x * 8);
+        }
+        shaper.curve = curve;
+
+        const nGain = this.ctx.createGain();
+        nGain.gain.setValueAtTime(heavy ? 0.55 : 0.40, now);
+        nGain.gain.exponentialRampToValueAtTime(0.001, now + dur);
+
+        noise.connect(shaper);
+        shaper.connect(nGain);
+        nGain.connect(this.master);
+        noise.start(now);
+
+        const freqs = heavy ? [110, 147, 680, 990] : [220, 620, 810];
+        freqs.forEach((f, idx) => {
+          const osc = this.ctx.createOscillator();
+          const g = this.ctx.createGain();
+          osc.type = idx % 2 === 0 ? 'sawtooth' : 'square';
+          osc.frequency.setValueAtTime(f, now);
+          osc.frequency.exponentialRampToValueAtTime(f * (idx % 2 === 0 ? 0.45 : 1.6), now + dur);
+          g.gain.setValueAtTime(heavy ? 0.34 : 0.28, now);
+          g.gain.exponentialRampToValueAtTime(0.001, now + dur);
+          osc.connect(g);
+          g.connect(this.master);
+          osc.start(now);
+          osc.stop(now + dur);
+        });
+      }
+
+      playSillyTroll() {
+        if (!this.ctx || !this.master || this.muted) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const g = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(340, now);
+        osc.frequency.linearRampToValueAtTime(140, now + 0.18);
+        osc.frequency.linearRampToValueAtTime(510, now + 0.32);
+        osc.frequency.linearRampToValueAtTime(95, now + 0.55);
+        g.gain.setValueAtTime(0.38, now);
+        g.gain.exponentialRampToValueAtTime(0.001, now + 0.58);
+        osc.connect(g);
+        g.connect(this.master);
+        osc.start(now);
+        osc.stop(now + 0.6);
+      }
+
+      playVictory() {
+        if (!this.ctx || !this.master || this.muted) return;
+        const now = this.ctx.currentTime;
+        [392, 493.88, 587.33, 783.99].forEach((f, i) => {
+          const osc = this.ctx.createOscillator();
+          const g = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(f, now + i * 0.11);
+          g.gain.setValueAtTime(0.30, now + i * 0.11);
+          g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.11 + 0.35);
+          osc.connect(g);
+          g.connect(this.master);
+          osc.start(now + i * 0.11);
+          osc.stop(now + i * 0.11 + 0.38);
+        });
+      }
+    }
+
+    const audio = new HorrorAudio();
+
+    ['touchstart', 'touchend', 'pointerdown', 'mousedown', 'keydown'].forEach(evt => {
+      window.addEventListener(evt, () => audio.unlock(), { passive: true });
+    });
+
+    const WORLD_W = 780;
+    const WORLD_H = 480;
+
+    const canvas = document.getElementById('arenaCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const gallowsCanvas = document.getElementById('gallowsCanvas');
+    const gCtx = gallowsCanvas.getContext('2d');
+
+    const mobileGallowsCanvas = document.getElementById('mobileGallowsCanvas');
+    const mgCtx = mobileGallowsCanvas.getContext('2d');
+
+    const trackpadCanvas = document.getElementById('trackpadCanvas');
+    const tCtx = trackpadCanvas.getContext('2d');
+
+    const heartsDisplay = document.getElementById('heartsDisplay');
+    const muteBtn = document.getElementById('muteBtn');
+    const newWordBtn = document.getElementById('newWordBtn');
+    const hintInline = document.getElementById('hintInline');
+    const wordBoxes = document.getElementById('wordBoxes');
+    const errorsVal = document.getElementById('errorsVal');
+    const timerVal = document.getElementById('timerVal');
+    const statusVal = document.getElementById('statusVal');
+    const mobileErrorsVal = document.getElementById('mobileErrorsVal');
+    const mobileTimerVal = document.getElementById('mobileTimerVal');
+    const mobileStatusVal = document.getElementById('mobileStatusVal');
+    const diaryBox = document.getElementById('diaryBox');
+    const keyboardGrid = document.getElementById('keyboardGrid');
+
+    const startModal = document.getElementById('startModal');
+    const diffSelector = document.getElementById('diffSelector');
+    const startBtn = document.getElementById('startBtn');
+    const prepOverlay = document.getElementById('prepOverlay');
+    const prepText = document.getElementById('prepText');
+    const prepSkipBtn = document.getElementById('prepSkipBtn');
+
+    const endOverlay = document.getElementById('endOverlay');
+    const endCanvas = document.getElementById('endCanvas');
+    const endCtx = endCanvas.getContext('2d');
+    const endInfo = document.getElementById('endInfo');
+    const endTitle = document.getElementById('endTitle');
+    const endReason = document.getElementById('endReason');
+    const endWord = document.getElementById('endWord');
+    const endClue = document.getElementById('endClue');
+    const retryBtn = document.getElementById('retryBtn');
+
+    const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    const HIT_BUBBLES = [
+      "AARGH! CHE SCHIFO!",
+      "MI HA LECCATO IL COLLO!",
+      "NON HO L'ANTITETANICA!",
+      "STAI LONTANO COSO ROSSO!",
+      "AIUTO MAMMA!!",
+      "ODDIO CHE ALITO!"
+    ];
+
+    const ARENA_SCARE_MSGS = [
+      "TI HA TOCCATO L'OMBRA CON LE MANI FREDDE!",
+      "BOO! L'OMINO HA PERSO TRE ANNI DI VITA!",
+      "TI HA MORSO UN GOMITO NEL BUIO!",
+      "JUMP SCARE STUPIDO! CORRI VIA!",
+      "TI HA ALITATO SUL CERVELLO!"
+    ];
+
+    let selectedDifficulty = 'facile';
+
+    let state = {
+      phase: 'menu',
+      difficulty: 'facile',
+      wordObj: null,
+      word: '',
+      revealedIndices: [],
+      triedGoodLetters: new Set(),
+      wrongLetters: [],
+      errors: 0,
+      maxErrors: 6,
+      lives: 3,
+      timeLeft: 75,
+      prepTimeLeft: 30,
+      monsterFrozenTimer: 0,
+      speedBoostTimer: 0,
+      shakeTimer: 0,
+      arenaScareTimer: 0,
+      arenaScareText: '',
+      bubbleText: '',
+      bubbleColor: '#ffcc00',
+      bubbleTimer: 0,
+      lastLetterRunNoticed: false,
+      sketchTick: 0,
+      sketchSeed: 1,
+      lastTime: 0,
+      endReasonText: '',
+      won: false
+    };
+
+    const player = {
+      x: 110,
+      y: 360,
+      r: 15,
+      baseSpeed: 215,
+      walkCycle: 0
+    };
+
+    const monster = {
+      x: 660,
+      y: 120,
+      r: 20,
+      speed: 105,
+      stunTimer: 0,
+      pathTimer: 0,
+      targetX: 110,
+      targetY: 360
+    };
+
+    const walls = [
+      { x: 180, y: 95,  w: 110, h: 24 },
+      { x: 110, y: 230, w: 24,  h: 90 },
+      { x: 405, y: 120, w: 24,  h: 110 },
+      { x: 245, y: 315, w: 145, h: 24 },
+      { x: 550, y: 265, w: 120, h: 24 }
+    ];
+
+    let spheres = [];
+    const keys = {};
+
+    const joy = {
+      active: false,
+      source: null,
+      touchId: null,
+      originX: 0,
+      originY: 0,
+      currX: 0,
+      currY: 0,
+      maxRadius: 34
+    };
+
+    function isMobileView() {
+      return window.matchMedia('(max-width: 900px), (hover: none) and (pointer: coarse)').matches;
+    }
+
+    function buildSidebarKeyboard() {
+      keyboardGrid.innerHTML = '';
+      for (const ch of ALPHABET) {
+        const btn = document.createElement('button');
+        btn.className = 'key-btn';
+        btn.textContent = ch;
+        btn.dataset.letter = ch;
+        btn.addEventListener('click', () => {
+          audio.unlock();
+          if (state.phase === 'playing') {
+            handleLetterGuess(ch, 'keyboard');
+          }
+        });
+        keyboardGrid.appendChild(btn);
+      }
+    }
+
+    function updateSidebarKeyboard() {
+      keyboardGrid.querySelectorAll('.key-btn').forEach(btn => {
+        const ch = btn.dataset.letter;
+        btn.className = 'key-btn';
+        btn.disabled = false;
+        if (state.wrongLetters.includes(ch)) {
+          btn.classList.add('used-bad');
+          btn.disabled = true;
+        } else if (state.triedGoodLetters.has(ch)) {
+          btn.classList.add('used-good');
+          btn.disabled = true;
+        }
+      });
+    }
+
+    function addDiaryEntry(text, type = 'info') {
+      const div = document.createElement('div');
+      div.className = `diary-entry ${type}`;
+      div.textContent = `• ${text}`;
+      diaryBox.prepend(div);
+      while (diaryBox.children.length > 25) {
+        diaryBox.removeChild(diaryBox.lastChild);
+      }
+    }
+
+    diffSelector.addEventListener('click', (e) => {
+      const btn = e.target.closest('.diff-btn');
+      if (!btn) return;
+      document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedDifficulty = btn.dataset.diff;
+    });
+
+    muteBtn.addEventListener('click', () => {
+      const muted = audio.toggleMute();
+      muteBtn.textContent = muted ? '🔇 Audio: OFF' : '🔊 Audio: ON';
+    });
+
+    newWordBtn.addEventListener('click', () => {
+      audio.unlock();
+      startGame(state.phase === 'menu' ? selectedDifficulty : state.difficulty);
+    });
+
+    startBtn.addEventListener('click', () => {
+      audio.unlock();
+      startGame(selectedDifficulty);
+    });
+
+    prepSkipBtn.addEventListener('click', () => {
+      audio.unlock();
+      if (state.phase === 'prep') beginHuntPhase();
+    });
+
+    retryBtn.addEventListener('click', () => {
+      audio.unlock();
+      endOverlay.classList.remove('visible');
+      endInfo.classList.remove('visible');
+      startModal.classList.remove('hidden');
+      state.phase = 'menu';
+      audio.stopMusic();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      const k = e.key.toLowerCase();
+      if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', ' '].includes(k)) {
+        if (state.phase === 'playing' || state.phase === 'prep') e.preventDefault();
+      }
+      keys[k] = true;
+
+      if (e.repeat) return;
+      if (state.phase === 'playing' && /^[a-z]$/.test(k)) {
+        handleLetterGuess(k.toUpperCase(), 'keyboard');
+      }
+    });
+
+    window.addEventListener('keyup', (e) => {
+      keys[e.key.toLowerCase()] = false;
+    });
+
+    function clientToLocalCanvas(targetCanvas, clientX, clientY) {
+      const rect = targetCanvas.getBoundingClientRect();
+      return {
+        x: ((clientX - rect.left) / rect.width) * targetCanvas.width,
+        y: ((clientY - rect.top) / rect.height) * targetCanvas.height
+      };
+    }
+
+    function attachTouchPadListeners(targetCanvas, sourceName) {
+      targetCanvas.addEventListener('touchstart', (e) => {
+        audio.unlock();
+        if (state.phase !== 'playing') return;
+        e.preventDefault();
+        const t = e.changedTouches[0];
+        const pt = clientToLocalCanvas(targetCanvas, t.clientX, t.clientY);
+        joy.active = true;
+        joy.source = sourceName;
+        joy.touchId = t.identifier;
+        joy.originX = pt.x;
+        joy.originY = pt.y;
+        joy.currX = pt.x;
+        joy.currY = pt.y;
+      }, { passive: false });
+
+      targetCanvas.addEventListener('touchmove', (e) => {
+        if (!joy.active || joy.source !== sourceName) return;
+        e.preventDefault();
+        for (const t of e.changedTouches) {
+          if (t.identifier === joy.touchId) {
+            const pt = clientToLocalCanvas(targetCanvas, t.clientX, t.clientY);
+            joy.currX = pt.x;
+            joy.currY = pt.y;
+            const dx = joy.currX - joy.originX;
+            const dy = joy.currY - joy.originY;
+            const dist = Math.hypot(dx, dy);
+            if (dist > joy.maxRadius) {
+              joy.originX = joy.currX - (dx / dist) * joy.maxRadius;
+              joy.originY = joy.currY - (dy / dist) * joy.maxRadius;
+            }
+            break;
+          }
+        }
+      }, { passive: false });
+
+      const stopPad = (e) => {
+        if (!joy.active || joy.source !== sourceName) return;
+        for (const t of e.changedTouches) {
+          if (t.identifier === joy.touchId) {
+            joy.active = false;
+            joy.source = null;
+            joy.touchId = null;
+            break;
+          }
+        }
+      };
+      targetCanvas.addEventListener('touchend', stopPad, { passive: true });
+      targetCanvas.addEventListener('touchcancel', stopPad, { passive: true });
+    }
+
+    attachTouchPadListeners(trackpadCanvas, 'trackpad');
+    attachTouchPadListeners(canvas, 'arena');
+
+    function startGame(difficulty) {
+      startModal.classList.add('hidden');
+      joy.active = false;
+      joy.source = null;
+
+      const entry = getNextUnlimitedWord();
+      state.difficulty = difficulty;
+      state.wordObj = entry;
+      state.word = entry.word;
+      state.revealedIndices = new Array(entry.word.length).fill(false);
+      state.triedGoodLetters = new Set();
+      state.wrongLetters = [];
+      state.errors = 0;
+      state.lives = 3;
+      state.monsterFrozenTimer = 0;
+      state.speedBoostTimer = 0;
+      state.shakeTimer = 0;
+      state.arenaScareTimer = 0;
+      state.bubbleTimer = 0;
+      state.lastLetterRunNoticed = false;
+      state.won = false;
+
+      player.x = 78;
+      player.y = WORLD_H - 90;
+      monster.x = WORLD_W - 120;
+      monster.y = 140;
+      monster.stunTimer = 0;
+      monster.pathTimer = 0;
+
+      diaryBox.innerHTML = '';
+
+      if (difficulty === 'facile') {
+        state.timeLeft = 75;
+        monster.speed = 100;
+        hintInline.classList.remove('visible');
+        addDiaryEntry(`Modalità FACILE: parola visibile, raccogli tutte le lettere in 75s!`, 'info');
+        beginHuntPhase();
+      } else if (difficulty === 'medio') {
+        state.timeLeft = 100;
+        monster.speed = 120;
+        state.revealedIndices[0] = true;
+        state.revealedIndices[state.word.length - 1] = true;
+        hintInline.textContent = `Suggerimento: ${entry.hint}`;
+        hintInline.classList.add('visible');
+        addDiaryEntry(`Nuova parola maledetta! Suggerimento: ${entry.hint}`, 'info');
+        beginHuntPhase();
+      } else if (difficulty === 'difficile') {
+        state.timeLeft = 120;
+        state.prepTimeLeft = 30;
+        monster.speed = 142;
+        hintInline.textContent = `Suggerimento: ${entry.hint}`;
+        hintInline.classList.add('visible');
+        state.phase = 'prep';
+        prepOverlay.classList.add('visible');
+        updatePrepUI();
+        spheres = [];
+        addDiaryEntry(`DIFFICILE - FASE STUDIO (30s)! Suggerimento: ${entry.hint}`, 'info');
+      } else {
+        state.timeLeft = 120;
+        state.prepTimeLeft = 30;
+        monster.speed = 165;
+        hintInline.textContent = `Suggerimento: ${entry.hint}`;
+        hintInline.classList.add('visible');
+        state.phase = 'prep';
+        prepOverlay.classList.add('visible');
+        updatePrepUI();
+        spheres = [];
+        addDiaryEntry(`ESTREMO - FASE STUDIO (30s)! Suggerimento: ${entry.hint}`, 'danger');
+      }
+
+      updateHUD();
+      updateSidebarKeyboard();
+      drawGallowsPreview();
+      audio.startMusic();
+    }
+
+    function beginHuntPhase() {
+      prepOverlay.classList.remove('visible');
+      state.phase = 'playing';
+      spawnInitialSpheres();
+      updateHUD();
+    }
+
+    function updatePrepUI() {
+      prepText.textContent = `FASE PREPARATORIA: ${Math.ceil(state.prepTimeLeft)}s — Ragiona sull'indizio! Il mostro è fermo.`;
+    }
+
+    function getNeededUniqueLetters() {
+      const needed = new Set();
+      for (let i = 0; i < state.word.length; i++) {
+        if (!state.revealedIndices[i]) needed.add(state.word[i]);
+      }
+      return Array.from(needed);
+    }
+
+    function checkLastLetterEscape() {
+      if (state.phase === 'playing' && !state.lastLetterRunNoticed && getNeededUniqueLetters().length === 1) {
+        state.lastLetterRunNoticed = true;
+        const lastCh = getNeededUniqueLetters()[0];
+        showBubble(`LA "${lastCh}" HA MESSO LE GAMBE!`, '#ffcc00', 2.0);
+        addDiaryEntry(`SPICY! All'ultima lettera "${lastCh}" sono spuntate le gambette e sta scappando!`, 'danger');
+      }
+    }
+
+    function isInsideWall(x, y, margin) {
+      for (const w of walls) {
+        if (x > w.x - margin && x < w.x + w.w + margin &&
+            y > w.y - margin && y < w.y + w.h + margin) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function findFreeSpot(margin = 28, minPlayerDist = 90) {
+      for (let tries = 0; tries < 90; tries++) {
+        const x = 40 + Math.random() * (WORLD_W - 80);
+        const y = 40 + Math.random() * (WORLD_H - 80);
+        if (isInsideWall(x, y, margin)) continue;
+        if (Math.hypot(x - player.x, y - player.y) < minPlayerDist) continue;
+        let overlap = false;
+        for (const s of spheres) {
+          if (Math.hypot(x - s.x, y - s.y) < 46) {
+            overlap = true;
+            break;
+          }
+        }
+        if (!overlap) return { x, y };
+      }
+      return { x: WORLD_W / 2, y: 45 };
+    }
+
+    function spawnInitialSpheres() {
+      spheres = [];
+      maintainSpheres();
+    }
+
+    function maintainSpheres() {
+      if (state.phase !== 'playing') return;
+
+      const needed = getNeededUniqueLetters();
+      const letterSpheres = spheres.filter(s => s.type === 'letter');
+      const currentGoodChars = new Set(
+        letterSpheres.filter(s => needed.includes(s.char)).map(s => s.char)
+      );
+
+      for (const ch of needed) {
+        if (currentGoodChars.size >= 4) break;
+        if (!currentGoodChars.has(ch)) {
+          const pos = findFreeSpot();
+          spheres.push({
+            x: pos.x,
+            y: pos.y,
+            r: 17,
+            type: 'letter',
+            char: ch,
+            seed: Math.random() * 100,
+            walkCycle: 0,
+            wanderAngle: Math.random() * Math.PI * 2
+          });
+          currentGoodChars.add(ch);
+        }
+      }
+
+      const wrongPool = ALPHABET.split('').filter(c => !state.word.includes(c));
+      while (spheres.filter(s => s.type === 'letter').length < 10) {
+        const ch = wrongPool[Math.floor(Math.random() * wrongPool.length)];
+        const pos = findFreeSpot();
+        spheres.push({
+          x: pos.x,
+          y: pos.y,
+          r: 17,
+          type: 'letter',
+          char: ch,
+          seed: Math.random() * 100,
+          walkCycle: 0,
+          wanderAngle: Math.random() * Math.PI * 2
+        });
+      }
+
+      while (spheres.filter(s => s.type === 'mystery').length < 2) {
+        const pos = findFreeSpot();
+        spheres.push({
+          x: pos.x,
+          y: pos.y,
+          r: 17,
+          type: 'mystery',
+          char: '?',
+          seed: Math.random() * 100
+        });
+      }
+    }
+
+    function handleLetterGuess(ch, source) {
+      if (state.phase !== 'playing') return;
+
+      let foundNew = false;
+      for (let i = 0; i < state.word.length; i++) {
+        if (state.word[i] === ch && !state.revealedIndices[i]) {
+          state.revealedIndices[i] = true;
+          foundNew = true;
+        }
+      }
+
+      if (foundNew) {
+        state.triedGoodLetters.add(ch);
+        audio.playGoodLetter();
+        if (!getNeededUniqueLetters().includes(ch)) {
+          spheres = spheres.filter(s => !(s.type === 'letter' && s.char === ch));
+        }
+        showBubble(`PRESA LA "${ch}"!`, '#2ecc71', 1.1);
+        addDiaryEntry(`Trovata la lettera "${ch}"!`, 'good');
+        updateHUD();
+        updateSidebarKeyboard();
+        maintainSpheres();
+        checkLastLetterEscape();
+
+        if (state.revealedIndices.every(Boolean)) {
+          triggerGameOver(true, "Hai completato la parola maledetta prima di morire!");
+        }
+      } else {
+        if (source === 'keyboard') {
+          if (state.triedGoodLetters.has(ch) || state.wrongLetters.includes(ch)) return;
+        }
+        if (!state.wrongLetters.includes(ch)) {
+          state.wrongLetters.push(ch);
+        }
+        state.errors++;
+        audio.playWrongLetter();
+        showBubble(`"${ch}" È SBAGLIATA! (+1 FORCA)`, '#ff4d4d', 1.3);
+        addDiaryEntry(`Lettera "${ch}" sbagliata! La forca avanza (${state.errors}/6).`, 'danger');
+        updateHUD();
+        updateSidebarKeyboard();
+        drawGallowsPreview();
+
+        if (state.errors >= state.maxErrors) {
+          triggerGameOver(false, "Hai raggiunto 6 errori alla forca!");
+        }
+      }
+    }
+
+    function triggerMysterySphere() {
+      const roll = Math.random();
+
+      if (roll < 0.50) {
+        audio.playMysteryGood();
+        const goodPick = Math.floor(Math.random() * 3);
+        if (goodPick === 0) {
+          const needed = getNeededUniqueLetters();
+          if (needed.length > 0) {
+            const ch = needed[Math.floor(Math.random() * needed.length)];
+            for (let i = 0; i < state.word.length; i++) {
+              if (state.word[i] === ch) state.revealedIndices[i] = true;
+            }
+            state.triedGoodLetters.add(ch);
+            spheres = spheres.filter(s => !(s.type === 'letter' && s.char === ch));
+            showBubble(`MIRACOLO! SVELATA LA "${ch}"!`, '#2ecc71', 1.8);
+            addDiaryEntry(`Sfera '?': miracolo! Svelata la lettera "${ch}".`, 'good');
+            updateHUD();
+            updateSidebarKeyboard();
+            checkLastLetterEscape();
+            if (state.revealedIndices.every(Boolean)) {
+              triggerGameOver(true, "Il '?' miracoloso ti ha salvato la pelle!");
+            }
+          }
+        } else if (goodPick === 1) {
+          state.monsterFrozenTimer = 5.0;
+          showBubble("MOSTRO CONGELATO 5s! CORRI!", '#3498db', 2.0);
+          addDiaryEntry(`Sfera '?': il mostro è stato congelato per 5 secondi!`, 'good');
+        } else {
+          state.speedBoostTimer = 6.0;
+          showBubble("TURBO GAMBE ATTIVATO!", '#ffcc00', 2.0);
+          addDiaryEntry(`Sfera '?': velocità extra per 6 secondi!`, 'good');
+        }
+      } else if (roll < 0.85) {
+        audio.playSillyTroll();
+        state.arenaScareTimer = 0.85;
+        state.arenaScareText = ARENA_SCARE_MSGS[Math.floor(Math.random() * ARENA_SCARE_MSGS.length)];
+        state.shakeTimer = 0.4;
+        try { if (navigator.vibrate) navigator.vibrate([90, 30, 90]); } catch (e) {}
+        showBubble("AHHH! SOLO UNO SPAVENTO!", '#ffcc00', 1.6);
+        addDiaryEntry(`JUMP SCARE! Solo spavento stupido (nessun danno).`, 'info');
+      } else {
+        audio.playJumpScare(false);
+        state.shakeTimer = 0.38;
+        try { if (navigator.vibrate) navigator.vibrate([140]); } catch (e) {}
+
+        if (Math.random() < 0.65) {
+          const angle = Math.random() * Math.PI * 2;
+          const dist = 120;
+          let nx = Math.max(35, Math.min(WORLD_W - 35, player.x + Math.cos(angle) * dist));
+          let ny = Math.max(35, Math.min(WORLD_H - 35, player.y + Math.sin(angle) * dist));
+          if (!isInsideWall(nx, ny, monster.r)) {
+            monster.x = nx;
+            monster.y = ny;
+          }
+          state.monsterFrozenTimer = 0;
+          showBubble("IL MOSTRO È DIETRO DI TE!", '#ff4d4d', 1.8);
+          addDiaryEntry(`Svantaggio '?': il mostro si è teletrasportato vicino!`, 'danger');
+        } else {
+          state.timeLeft = Math.max(1, state.timeLeft - 7);
+          showBubble("MALUS! -7 SECONDI!", '#ff4d4d', 1.8);
+          addDiaryEntry(`Svantaggio '?': la maledizione ti ha rubato 7 secondi!`, 'danger');
+          updateHUD();
+        }
+      }
+      maintainSpheres();
+    }
+
+    function showBubble(text, color = '#ffcc00', duration = 1.6) {
+      state.bubbleText = text;
+      state.bubbleColor = color;
+      state.bubbleTimer = duration;
+    }
+
+    function resolveCircleWall(entity, bottomPad = 4) {
+      entity.x = Math.max(entity.r + 4, Math.min(WORLD_W - entity.r - 4, entity.x));
+      entity.y = Math.max(entity.r + 4, Math.min(WORLD_H - entity.r - bottomPad, entity.y));
+
+      for (const w of walls) {
+        const closestX = Math.max(w.x, Math.min(entity.x, w.x + w.w));
+        const closestY = Math.max(w.y, Math.min(entity.y, w.y + w.h));
+        const dx = entity.x - closestX;
+        const dy = entity.y - closestY;
+        const distSq = dx * dx + dy * dy;
+
+        if (distSq < entity.r * entity.r) {
+          const dist = Math.sqrt(distSq);
+          if (dist > 0.0001) {
+            const overlap = entity.r - dist;
+            entity.x += (dx / dist) * overlap;
+            entity.y += (dy / dist) * overlap;
+          } else {
+            entity.y -= entity.r;
+          }
+        }
+      }
+    }
+
+    function updateFleeingLastLetter(dt) {
+      const needed = getNeededUniqueLetters();
+      if (needed.length !== 1) return;
+      const lastChar = needed[0];
+
+      for (const s of spheres) {
+        if (s.type !== 'letter' || s.char !== lastChar) continue;
+
+        if (s.walkCycle === undefined) s.walkCycle = 0;
+        if (s.wanderAngle === undefined) s.wanderAngle = Math.random() * Math.PI * 2;
+
+        const dx = s.x - player.x;
+        const dy = s.y - player.y;
+        const dist = Math.hypot(dx, dy) || 1;
+
+        let dirX, dirY, spd;
+        if (dist < 290) {
+          const awayX = dx / dist;
+          const awayY = dy / dist;
+          const perpX = -awayY;
+          const perpY = awayX;
+          const wiggle = Math.sin(performance.now() * 0.006 + s.seed) * 0.48;
+
+          let centerPushX = 0;
+          let centerPushY = 0;
+          if (s.x < 75 || s.x > WORLD_W - 75) centerPushX = (WORLD_W / 2 - s.x) / (WORLD_W / 2);
+          if (s.y < 75 || s.y > WORLD_H - 75) centerPushY = (WORLD_H / 2 - s.y) / (WORLD_H / 2);
+
+          dirX = awayX + perpX * wiggle + centerPushX * 0.95;
+          dirY = awayY + perpY * wiggle + centerPushY * 0.95;
+          spd = 148;
+        } else {
+          s.wanderAngle += (Math.random() - 0.5) * 3.8 * dt;
+          dirX = Math.cos(s.wanderAngle);
+          dirY = Math.sin(s.wanderAngle);
+          spd = 92;
+        }
+
+        const dLen = Math.hypot(dirX, dirY) || 1;
+        s.x += (dirX / dLen) * spd * dt;
+        s.y += (dirY / dLen) * spd * dt;
+        s.walkCycle += dt * (spd * 0.13);
+
+        resolveCircleWall(s, 12);
+      }
+    }
+
+    function computeMonsterWaypoint() {
+      const CELL = 40;
+      const COLS = Math.floor(WORLD_W / CELL);
+      const ROWS = Math.floor(WORLD_H / CELL);
+
+      const startC = Math.max(0, Math.min(COLS - 1, Math.floor(monster.x / CELL)));
+      const startR = Math.max(0, Math.min(ROWS - 1, Math.floor(monster.y / CELL)));
+      const goalC = Math.max(0, Math.min(COLS - 1, Math.floor(player.x / CELL)));
+      const goalR = Math.max(0, Math.min(ROWS - 1, Math.floor(player.y / CELL)));
+
+      if (startC === goalC && startR === goalR) {
+        monster.targetX = player.x;
+        monster.targetY = player.y;
+        return;
+      }
+
+      const blocked = (c, r) => isInsideWall(c * CELL + CELL / 2, r * CELL + CELL / 2, 12);
+      const visited = new Uint8Array(COLS * ROWS);
+      const parent = new Int16Array(COLS * ROWS).fill(-1);
+      const queue = [];
+
+      const startIdx = startR * COLS + startC;
+      const goalIdx = goalR * COLS + goalC;
+      queue.push(startIdx);
+      visited[startIdx] = 1;
+
+      const dirs = [[1,0],[-1,0],[0,1],[0,-1]];
+      let found = false;
+      let head = 0;
+
+      while (head < queue.length) {
+        const curr = queue[head++];
+        if (curr === goalIdx) { found = true; break; }
+        const cr = Math.floor(curr / COLS);
+        const cc = curr % COLS;
+
+        for (const [dc, dr] of dirs) {
+          const nc = cc + dc;
+          const nr = cr + dr;
+          if (nc < 0 || nc >= COLS || nr < 0 || nr >= ROWS) continue;
+          const nIdx = nr * COLS + nc;
+          if (visited[nIdx]) continue;
+          if (nIdx !== goalIdx && blocked(nc, nr)) continue;
+          visited[nIdx] = 1;
+          parent[nIdx] = curr;
+          queue.push(nIdx);
+        }
+      }
+
+      if (!found) {
+        monster.targetX = player.x;
+        monster.targetY = player.y;
+        return;
+      }
+
+      let step = goalIdx;
+      while (parent[step] !== -1 && parent[step] !== startIdx) {
+        step = parent[step];
+      }
+      monster.targetX = (step % COLS) * CELL + CELL / 2;
+      monster.targetY = Math.floor(step / COLS) * CELL + CELL / 2;
+    }
+
+    function knockMonsterFarAway() {
+      const candidates = [
+        { x: 55, y: 55 },
+        { x: WORLD_W - 55, y: 55 },
+        { x: 55, y: WORLD_H - 55 },
+        { x: WORLD_W - 55, y: WORLD_H - 55 }
+      ];
+      let best = candidates[0];
+      let bestDist = -1;
+      for (const c of candidates) {
+        const d = Math.hypot(c.x - player.x, c.y - player.y);
+        if (d > bestDist) {
+          bestDist = d;
+          best = c;
+        }
+      }
+      monster.x = best.x;
+      monster.y = best.y;
+      monster.stunTimer = 0.65;
+    }
+
+    function update(dt) {
+      state.sketchTick += dt;
+      if (state.sketchTick >= 0.1) {
+        state.sketchTick = 0;
+        state.sketchSeed = Math.random() * 1000;
+      }
+
+      if (state.phase === 'prep') {
+        state.prepTimeLeft -= dt;
+        if (state.prepTimeLeft <= 0) beginHuntPhase();
+        else updatePrepUI();
+        updateStatusBox(999);
+        return;
+      }
+
+      if (state.phase !== 'playing') return;
+
+      state.timeLeft -= dt;
+      if (state.timeLeft <= 0) {
+        state.timeLeft = 0;
+        updateHUD();
+        triggerGameOver(false, "È scaduto il tempo! La maledizione si è compiuta.");
+        return;
+      }
+
+      if (state.monsterFrozenTimer > 0) state.monsterFrozenTimer -= dt;
+      if (state.speedBoostTimer > 0) state.speedBoostTimer -= dt;
+      if (state.shakeTimer > 0) state.shakeTimer -= dt;
+      if (state.arenaScareTimer > 0) state.arenaScareTimer -= dt;
+      if (state.bubbleTimer > 0) state.bubbleTimer -= dt;
+      if (monster.stunTimer > 0) monster.stunTimer -= dt;
+
+      let mx = 0, my = 0;
+      if (keys['w'] || keys['arrowup']) my -= 1;
+      if (keys['s'] || keys['arrowdown']) my += 1;
+      if (keys['a'] || keys['arrowleft']) mx -= 1;
+      if (keys['d'] || keys['arrowright']) mx += 1;
+
+      if (joy.active) {
+        const dx = joy.currX - joy.originX;
+        const dy = joy.currY - joy.originY;
+        const d = Math.hypot(dx, dy);
+        if (d > 4) {
+          mx = dx / d;
+          my = dy / d;
+        }
+      }
+
+      const len = Math.hypot(mx, my);
+      if (len > 0) {
+        mx /= len;
+        my /= len;
+        const spd = state.speedBoostTimer > 0 ? player.baseSpeed * 1.48 : player.baseSpeed;
+        player.x += mx * spd * dt;
+        player.y += my * spd * dt;
+        player.walkCycle += dt * 14;
+      }
+      resolveCircleWall(player);
+
+      updateFleeingLastLetter(dt);
+
+      const distToPlayer = Math.hypot(monster.x - player.x, monster.y - player.y);
+      audio.monsterDistanceRatio = Math.min(1, distToPlayer / 500);
+
+      if (state.monsterFrozenTimer <= 0 && monster.stunTimer <= 0) {
+        monster.pathTimer -= dt;
+        if (monster.pathTimer <= 0) {
+          monster.pathTimer = 0.18;
+          computeMonsterWaypoint();
+        }
+        const tx = distToPlayer < 130 ? player.x : monster.targetX;
+        const ty = distToPlayer < 130 ? player.y : monster.targetY;
+        const dx = tx - monster.x;
+        const dy = ty - monster.y;
+        const d = Math.hypot(dx, dy);
+        if (d > 1) {
+          monster.x += (dx / d) * monster.speed * dt;
+          monster.y += (dy / d) * monster.speed * dt;
+        }
+        resolveCircleWall(monster);
+      }
+
+      const hitDist = Math.hypot(monster.x - player.x, monster.y - player.y);
+      if (hitDist < player.r + monster.r - 4) {
+        state.lives--;
+        state.shakeTimer = 0.5;
+        state.arenaScareTimer = 0.85;
+        state.arenaScareText = ARENA_SCARE_MSGS[Math.floor(Math.random() * ARENA_SCARE_MSGS.length)];
+        audio.playJumpScare(false);
+        try { if (navigator.vibrate) navigator.vibrate([120, 40, 180]); } catch (e) {}
+        showBubble(HIT_BUBBLES[Math.floor(Math.random() * HIT_BUBBLES.length)], '#ffee58', 2.0);
+        addDiaryEntry(`JUMP SCARE! L'omino ha perso tre anni di vita (-1 ❤️).`, 'danger');
+        updateHUD();
+
+        if (state.lives <= 0) {
+          triggerGameOver(false, "Lo Scarabocchio Rosso ti ha divorato tutte e 3 le vite!");
+          return;
+        } else {
+          knockMonsterFarAway();
+        }
+      }
+
+      for (let i = spheres.length - 1; i >= 0; i--) {
+        const s = spheres[i];
+        if (Math.hypot(s.x - player.x, s.y - player.y) < player.r + s.r) {
+          spheres.splice(i, 1);
+          if (s.type === 'letter') handleLetterGuess(s.char, 'sphere');
+          else triggerMysterySphere();
+          if (state.phase !== 'playing') return;
+        }
+      }
+
+      const secs = `${Math.ceil(state.timeLeft)}s`;
+      timerVal.textContent = secs;
+      mobileTimerVal.textContent = secs;
+      updateStatusBox(distToPlayer);
+    }
+
+    function updateStatusBox(distToPlayer) {
+      let text = 'Ignaro (per ora)';
+      let cls = 'stat-value val-green';
+
+      if (state.phase === 'prep') {
+        text = 'Studia indizio...';
+        cls = 'stat-value val-yellow';
+      } else if (state.monsterFrozenTimer > 0) {
+        text = `Ghiacciato (${Math.ceil(state.monsterFrozenTimer)}s)`;
+        cls = 'stat-value val-cyan';
+      } else if (distToPlayer < 220) {
+        text = 'INSEGUITO!';
+        cls = 'stat-value val-red';
+      }
+
+      statusVal.textContent = text;
+      statusVal.className = cls;
+      mobileStatusVal.textContent = text;
+      mobileStatusVal.className = cls;
+    }
+
+    function updateHUD() {
+      let heartsStr = '';
+      for (let i = 0; i < 3; i++) heartsStr += i < state.lives ? '❤️' : '🖤';
+      heartsDisplay.textContent = heartsStr;
+
+      errorsVal.textContent = `${state.errors} / ${state.maxErrors}`;
+      mobileErrorsVal.textContent = `${state.errors} / ${state.maxErrors} ERRORI`;
+
+      const secs = `${Math.ceil(state.timeLeft)}s`;
+      timerVal.textContent = secs;
+      mobileTimerVal.textContent = secs;
+
+      wordBoxes.innerHTML = '';
+      for (let i = 0; i < state.word.length; i++) {
+        const tile = document.createElement('div');
+        tile.className = 'letter-tile';
+        const isRev = state.revealedIndices[i];
+
+        if (state.difficulty === 'facile') {
+          tile.textContent = state.word[i];
+          tile.classList.add(isRev ? 'collected' : 'facile-ghost');
+        } else {
+          if (isRev) {
+            tile.textContent = state.word[i];
+            if (state.difficulty === 'medio' && (i === 0 || i === state.word.length - 1)) {
+              tile.classList.add('prefilled');
+            } else {
+              tile.classList.add('collected');
+            }
+          } else {
+            tile.textContent = '_';
+            tile.classList.add('empty');
+          }
+        }
+        wordBoxes.appendChild(tile);
+      }
+    }
+
+    function jitter(seed, amp = 1.6) {
+      const x = Math.sin(seed * 12.9898 + state.sketchSeed * 0.17) * 43758.5453;
+      return ((x - Math.floor(x)) - 0.5) * 2 * amp;
+    }
+
+    function drawSketchLine(c, x1, y1, x2, y2, seed, amp = 1.6) {
+      const mx = (x1 + x2) / 2 + jitter(seed + 1, amp);
+      const my = (y1 + y2) / 2 + jitter(seed + 2, amp);
+      c.beginPath();
+      c.moveTo(x1 + jitter(seed + 3, amp * 0.6), y1 + jitter(seed + 4, amp * 0.6));
+      c.quadraticCurveTo(mx, my, x2 + jitter(seed + 5, amp * 0.6), y2 + jitter(seed + 6, amp * 0.6));
+      c.stroke();
+    }
+
+    function drawSketchPolygonCircle(c, cx, cy, r, sides, seed, amp = 2.0) {
+      c.beginPath();
+      for (let i = 0; i <= sides; i++) {
+        const a = (i % sides) * ((Math.PI * 2) / sides);
+        const rr = r + jitter(seed + i * 3, amp);
+        const px = cx + Math.cos(a) * rr;
+        const py = cy + Math.sin(a) * rr;
+        if (i === 0) c.moveTo(px, py);
+        else c.lineTo(px, py);
+      }
+      c.stroke();
+    }
+
+    function drawGallowsOn(c, W, H) {
+      c.fillStyle = '#0a0a0a';
+      c.fillRect(0, 0, W, H);
+
+      const sx = W / 260;
+      const sy = H / 145;
+      const s = Math.min(sx, sy);
+      const ox = (W - 260 * s) / 2;
+      const oy = (H - 145 * s) / 2;
+
+      c.save();
+      c.translate(ox, oy);
+      c.scale(s, s);
+
+      c.strokeStyle = '#d8d8d8';
+      c.lineWidth = 3;
+      c.lineCap = 'round';
+
+      drawSketchLine(c, 65, 125, 125, 125, 1, 1.0);
+
+      if (state.errors >= 1) drawSketchLine(c, 95, 125, 95, 22, 2, 1.2);
+      if (state.errors >= 2) drawSketchLine(c, 95, 22, 165, 22, 3, 1.2);
+      if (state.errors >= 3) {
+        drawSketchLine(c, 95, 45, 118, 22, 4, 1.0);
+        c.strokeStyle = '#b89f35';
+        drawSketchLine(c, 165, 22, 165, 44, 5, 0.8);
+      }
+      c.strokeStyle = '#ffffff';
+      if (state.errors >= 4) drawSketchPolygonCircle(c, 165, 56, 12, 10, 6, 1.1);
+      if (state.errors >= 5) {
+        drawSketchLine(c, 165, 68, 165, 100, 7, 1.0);
+        drawSketchLine(c, 165, 76, 148, 90, 8, 1.0);
+        drawSketchLine(c, 165, 76, 182, 90, 9, 1.0);
+      }
+      if (state.errors >= 6) {
+        drawSketchLine(c, 165, 100, 152, 120, 10, 1.0);
+        drawSketchLine(c, 165, 100, 178, 120, 11, 1.0);
+      }
+      c.restore();
+    }
+
+    function drawGallowsPreview() {
+      drawGallowsOn(gCtx, gallowsCanvas.width, gallowsCanvas.height);
+      drawGallowsOn(mgCtx, mobileGallowsCanvas.width, mobileGallowsCanvas.height);
+    }
+
+    function renderTrackpad() {
+      if (trackpadCanvas.offsetParent === null) return;
+
+      const rect = trackpadCanvas.getBoundingClientRect();
+      if (rect.width > 10 && rect.height > 10) {
+        const targetW = Math.round(rect.width);
+        const targetH = Math.round(rect.height);
+        if (Math.abs(trackpadCanvas.width - targetW) > 2 || Math.abs(trackpadCanvas.height - targetH) > 2) {
+          trackpadCanvas.width = targetW;
+          trackpadCanvas.height = targetH;
+        }
+      }
+
+      const TP_W = trackpadCanvas.width;
+      const TP_H = trackpadCanvas.height;
+
+      tCtx.fillStyle = '#0a0a0a';
+      tCtx.fillRect(0, 0, TP_W, TP_H);
+
+      tCtx.strokeStyle = '#181818';
+      tCtx.lineWidth = 1;
+      tCtx.beginPath();
+      for (let gx = 0; gx <= TP_W; gx += 28) { tCtx.moveTo(gx, 0); tCtx.lineTo(gx, TP_H); }
+      for (let gy = 0; gy <= TP_H; gy += 28) { tCtx.moveTo(0, gy); tCtx.lineTo(TP_W, gy); }
+      tCtx.stroke();
+
+      const cx = TP_W / 2;
+      const cy = TP_H / 2;
+
+      if (joy.active && joy.source === 'trackpad') {
+        tCtx.strokeStyle = 'rgba(243, 198, 35, 0.65)';
+        tCtx.fillStyle = 'rgba(243, 198, 35, 0.08)';
+        tCtx.lineWidth = 2;
+        drawSketchPolygonCircle(tCtx, joy.originX, joy.originY, joy.maxRadius, 12, 800, 1.2);
+        tCtx.fill();
+
+        tCtx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+        tCtx.lineWidth = 2;
+        tCtx.beginPath();
+        tCtx.moveTo(joy.originX, joy.originY);
+        tCtx.lineTo(joy.currX, joy.currY);
+        tCtx.stroke();
+
+        tCtx.fillStyle = '#f3c623';
+        tCtx.beginPath();
+        tCtx.arc(joy.currX, joy.currY, 14, 0, Math.PI * 2);
+        tCtx.fill();
+      } else {
+        const ringR = Math.min(32, Math.max(20, TP_H * 0.24));
+        tCtx.strokeStyle = '#2d2d2d';
+        tCtx.lineWidth = 2;
+        drawSketchPolygonCircle(tCtx, cx, cy, ringR, 12, 810, 1.2);
+        drawSketchLine(tCtx, cx - 12, cy, cx + 12, cy, 811, 0.7);
+        drawSketchLine(tCtx, cx, cy - 12, cx, cy + 12, 812, 0.7);
+
+        tCtx.fillStyle = '#666';
+        tCtx.font = 'bold 12px "Comic Sans MS", "Chalkboard SE", cursive';
+        tCtx.textAlign = 'center';
+        tCtx.textBaseline = 'middle';
+        tCtx.fillText('TRACKPAD — TRASCINA QUI IL POLLICE', cx, TP_H - 14);
+      }
+    }
+
+    function getCameraTransform() {
+      if (!isMobileView()) {
+        if (canvas.width !== WORLD_W || canvas.height !== WORLD_H) {
+          canvas.width = WORLD_W;
+          canvas.height = WORLD_H;
+        }
+        return { scale: 1, camX: 0, camY: 0, viewW: WORLD_W, viewH: WORLD_H };
+      }
+
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width > 10 && rect.height > 10) {
+        const targetW = 540;
+        const targetH = Math.max(240, Math.round(targetW * (rect.height / rect.width)));
+        if (Math.abs(canvas.width - targetW) > 2 || Math.abs(canvas.height - targetH) > 2) {
+          canvas.width = targetW;
+          canvas.height = targetH;
+        }
+      }
+
+      const scale = Math.min(canvas.width / 460, canvas.height / WORLD_H);
+      const viewW = canvas.width / scale;
+      const viewH = canvas.height / scale;
+
+      let camX = 0;
+      let camY = 0;
+      if (viewW < WORLD_W) {
+        camX = Math.max(0, Math.min(WORLD_W - viewW, player.x - viewW / 2));
+      } else {
+        camX = -(viewW - WORLD_W) / 2;
+      }
+      if (viewH < WORLD_H) {
+        camY = Math.max(0, Math.min(WORLD_H - viewH, player.y - viewH / 2));
+      } else {
+        camY = -(viewH - WORLD_H) / 2;
+      }
+
+      return { scale, camX, camY, viewW, viewH };
+    }
+
+    function renderArena() {
+      const cam = getCameraTransform();
+      const CW = canvas.width;
+      const CH = canvas.height;
+
+      ctx.save();
+      ctx.fillStyle = '#0a0a0a';
+      ctx.fillRect(0, 0, CW, CH);
+
+      if (state.shakeTimer > 0) {
+        const mag = 7;
+        ctx.translate((Math.random() - 0.5) * mag * 2, (Math.random() - 0.5) * mag * 2);
+      }
+
+      ctx.save();
+      ctx.scale(cam.scale, cam.scale);
+      ctx.translate(-cam.camX, -cam.camY);
+
+      ctx.strokeStyle = '#181818';
+      ctx.lineWidth = 1;
+      const gridStep = 34;
+      ctx.beginPath();
+      for (let gx = 0; gx <= WORLD_W; gx += gridStep) { ctx.moveTo(gx, 0); ctx.lineTo(gx, WORLD_H); }
+      for (let gy = 0; gy <= WORLD_H; gy += gridStep) { ctx.moveTo(0, gy); ctx.lineTo(WORLD_W, gy); }
+      ctx.stroke();
+
+      if (isMobileView()) {
+        ctx.strokeStyle = '#2b2b2b';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(0, 0, WORLD_W, WORLD_H);
+      }
+
+      ctx.strokeStyle = '#666';
+      ctx.lineWidth = 2;
+      walls.forEach((w, idx) => {
+        drawSketchLine(ctx, w.x, w.y, w.x + w.w, w.y, idx * 10 + 1, 1.1);
+        drawSketchLine(ctx, w.x + w.w, w.y, w.x + w.w, w.y + w.h, idx * 10 + 2, 1.1);
+        drawSketchLine(ctx, w.x + w.w, w.y + w.h, w.x, w.y + w.h, idx * 10 + 3, 1.1);
+        drawSketchLine(ctx, w.x, w.y + w.h, w.x, w.y, idx * 10 + 4, 1.1);
+      });
+
+      const neededLetters = getNeededUniqueLetters();
+      const isLastLetterRunning = state.phase === 'playing' && neededLetters.length === 1;
+      const lastChar = isLastLetterRunning ? neededLetters[0] : null;
+
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = 'bold 16px "Comic Sans MS", "Chalkboard SE", cursive';
+
+      for (const s of spheres) {
+        if (s.type === 'letter') {
+          if (isLastLetterRunning && s.char === lastChar) {
+            const legSwing = Math.sin(s.walkCycle || 0) * 6;
+            ctx.strokeStyle = '#d4af37';
+            ctx.lineWidth = 2.2;
+            ctx.lineCap = 'round';
+            drawSketchLine(ctx, s.x - 5, s.y + s.r - 2, s.x - 7 - legSwing, s.y + s.r + 10, s.seed + 21, 0.9);
+            drawSketchLine(ctx, s.x + 5, s.y + s.r - 2, s.x + 7 + legSwing, s.y + s.r + 10, s.seed + 22, 0.9);
+          }
+
+          ctx.fillStyle = 'rgba(184, 159, 53, 0.10)';
+          ctx.strokeStyle = '#d4af37';
+          ctx.lineWidth = 2.2;
+          drawSketchPolygonCircle(ctx, s.x, s.y, s.r, 10, s.seed, 2.0);
+          ctx.fill();
+          ctx.fillStyle = '#f3c623';
+          ctx.fillText(s.char, s.x, s.y + 1);
+        } else {
+          ctx.fillStyle = 'rgba(192, 57, 43, 0.14)';
+          ctx.strokeStyle = '#e74c3c';
+          ctx.lineWidth = 2.2;
+          drawSketchPolygonCircle(ctx, s.x, s.y, s.r, 9, s.seed, 2.4);
+          ctx.fill();
+          ctx.fillStyle = '#ff6b6b';
+          ctx.fillText('?', s.x, s.y + 1);
+        }
+      }
+
+      drawMonster(ctx, monster.x, monster.y, monster.r);
+      drawStickman(ctx, player.x, player.y, player.walkCycle);
+
+      if (state.phase === 'playing') {
+        let innerR = 95;
+        let outerR = 245;
+        let darkEdge = 0.88;
+
+        if (state.difficulty === 'difficile') {
+          innerR = 112;
+          outerR = 285;
+          darkEdge = 0.76;
+        } else if (state.difficulty === 'estremo') {
+          innerR = 52;
+          outerR = 148;
+          darkEdge = 0.985;
+        }
+
+        const grad = ctx.createRadialGradient(player.x, player.y, innerR, player.x, player.y, outerR);
+        grad.addColorStop(0, 'rgba(0, 0, 0, 0)');
+        grad.addColorStop(0.55, state.difficulty === 'difficile' ? 'rgba(0, 0, 0, 0.22)' : 'rgba(0, 0, 0, 0.35)');
+        grad.addColorStop(0.88, `rgba(5, 5, 5, ${Math.max(0, darkEdge - 0.04)})`);
+        grad.addColorStop(1, `rgba(5, 5, 5, ${darkEdge})`);
+        ctx.fillStyle = grad;
+        ctx.fillRect(cam.camX - 40, cam.camY - 40, cam.viewW + 80, cam.viewH + 80);
+      }
+
+      if (state.bubbleTimer > 0 && state.bubbleText) {
+        drawSpeechBubble(ctx, player.x, player.y - 38, state.bubbleText, state.bubbleColor, cam);
+      }
+
+      ctx.restore();
+
+      if (joy.active && joy.source === 'arena') {
+        ctx.save();
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.06)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(joy.originX, joy.originY, joy.maxRadius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = 'rgba(243, 198, 35, 0.65)';
+        ctx.beginPath();
+        ctx.arc(joy.currX, joy.currY, 13, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      if (state.arenaScareTimer > 0) {
+        drawArenaJumpScare(ctx, CW, CH);
+      }
+
+      ctx.restore();
+    }
+
+    function drawStickman(c, x, y, walkCycle) {
+      c.save();
+      c.strokeStyle = state.speedBoostTimer > 0 ? '#ffcc00' : '#ffffff';
+      c.lineWidth = 2.4;
+      c.lineCap = 'round';
+      const swing = Math.sin(walkCycle) * 5;
+
+      drawSketchPolygonCircle(c, x, y - 10, 7.5, 10, 100, 1.0);
+      c.fillStyle = '#ffffff';
+      c.beginPath();
+      c.arc(x - 2.5, y - 11, 1.4, 0, Math.PI * 2);
+      c.arc(x + 2.5, y - 11, 1.4, 0, Math.PI * 2);
+      c.fill();
+
+      drawSketchLine(c, x, y - 3, x, y + 9, 110, 1.1);
+      drawSketchLine(c, x, y + 1, x - 9, y + 5 + swing * 0.5, 115, 1.1);
+      drawSketchLine(c, x, y + 1, x + 9, y + 5 - swing * 0.5, 120, 1.1);
+      drawSketchLine(c, x, y + 9, x - 6, y + 19 - swing, 125, 1.1);
+      drawSketchLine(c, x, y + 9, x + 6, y + 19 + swing, 130, 1.1);
+      c.restore();
+    }
+
+    function drawMonster(c, x, y, r) {
+      c.save();
+      const frozen = state.monsterFrozenTimer > 0;
+      c.strokeStyle = frozen ? '#3498db' : '#e74c3c';
+      c.fillStyle = frozen ? 'rgba(52, 152, 219, 0.25)' : 'rgba(231, 76, 60, 0.16)';
+      c.lineWidth = 2.4;
+
+      drawSketchPolygonCircle(c, x, y - 4, r * 0.72, 12, 300, 2.8);
+      c.fill();
+      drawSketchLine(c, x, y + 9, x, y + 20, 310, 1.8);
+      drawSketchLine(c, x, y + 12, x - 9, y + 17, 315, 1.8);
+      drawSketchLine(c, x, y + 12, x + 9, y + 17, 320, 1.8);
+
+      c.fillStyle = frozen ? '#e0f7fa' : '#ffeb3b';
+      c.beginPath();
+      c.arc(x - 5 + jitter(370, 0.8), y - 5 + jitter(371, 0.8), 2.3, 0, Math.PI * 2);
+      c.arc(x + 5 + jitter(372, 0.8), y - 5 + jitter(373, 0.8), 2.3, 0, Math.PI * 2);
+      c.fill();
+      c.restore();
+    }
+
+    function drawSpeechBubble(c, x, y, text, color, cam) {
+      c.save();
+      c.font = 'bold 12px "Comic Sans MS", "Chalkboard SE", cursive';
+      const w = Math.min(250, c.measureText(text).width + 20);
+      const h = 26;
+      const minX = cam.camX + 10;
+      const maxX = cam.camX + cam.viewW - w - 10;
+      const minY = cam.camY + 8;
+      const bx = Math.max(minX, Math.min(maxX, x - w / 2));
+      const by = Math.max(minY, y - h);
+
+      c.fillStyle = '#fffde7';
+      c.strokeStyle = color;
+      c.lineWidth = 2.5;
+      c.beginPath();
+      c.roundRect(bx, by, w, h, 8);
+      c.fill();
+      c.stroke();
+
+      c.beginPath();
+      c.moveTo(x - 5, by + h);
+      c.lineTo(x, by + h + 7);
+      c.lineTo(x + 5, by + h);
+      c.closePath();
+      c.fill();
+      c.stroke();
+
+      c.fillStyle = '#111';
+      c.textAlign = 'center';
+      c.textBaseline = 'middle';
+      c.fillText(text, bx + w / 2, by + h / 2 + 1, w - 10);
+      c.restore();
+    }
+
+    function drawArenaJumpScare(c, CW, CH) {
+      c.save();
+      c.fillStyle = 'rgba(0, 0, 0, 0.86)';
+      c.fillRect(0, 0, CW, CH);
+
+      const scale = Math.min(1, CW / 480, CH / 360);
+      const boxW = 360 * scale;
+      const boxH

@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -17,11 +18,16 @@
       background-color: #0d0d0d;
       color: #e5e5e5;
       font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', cursive, sans-serif;
-      min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       justify-content: center;
       align-items: flex-start;
       overflow-x: hidden;
+      overscroll-behavior: none;
+    }
+
+    button {
+      touch-action: manipulation;
     }
 
     .game-wrapper {
@@ -33,6 +39,11 @@
       gap: 10px;
     }
 
+    /* Su desktop è trasparente alla disposizione (identica all'originale) */
+    .top-quarter {
+      display: contents;
+    }
+
     /* RIQUADRI PRINCIPALI */
     .panel-box {
       background-color: #161616;
@@ -40,7 +51,7 @@
       border-radius: 18px;
     }
 
-    /* 1. HEADER SUPERIORE */
+    /* 1. HEADER SUPERIORE (DESKTOP) */
     .top-header {
       padding: 10px 18px;
       display: flex;
@@ -101,9 +112,7 @@
       font-weight: bold;
       cursor: pointer;
     }
-    .audio-btn:hover {
-      background: #333;
-    }
+    .audio-btn:hover { background: #333; }
 
     .new-word-btn {
       background: #7f1d1d;
@@ -116,11 +125,9 @@
       font-weight: bold;
       cursor: pointer;
     }
-    .new-word-btn:hover {
-      background: #991b1b;
-    }
+    .new-word-btn:hover { background: #991b1b; }
 
-    /* 2. RIGA HUD (PAROLA A SINISTRA + 3 BOX A DESTRA) */
+    /* 2. RIGA HUD (DESKTOP) */
     .hud-panel {
       padding: 12px 18px;
       display: flex;
@@ -149,9 +156,7 @@
       color: #f3c623;
       display: none;
     }
-    .hint-inline.visible {
-      display: block;
-    }
+    .hint-inline.visible { display: block; }
 
     .word-boxes {
       display: flex;
@@ -218,7 +223,15 @@
     .val-green { color: #2ecc71; }
     .val-cyan { color: #3498db; }
 
-    /* 3. AREA PRINCIPALE: ARENA A SINISTRA + SIDEBAR A DESTRA */
+    /* Elementi dedicati solo alla struttura mobile (nascosti su computer) */
+    .mobile-time-box,
+    .mobile-gallows-card,
+    .mobile-status-bar,
+    .sb-trackpad {
+      display: none;
+    }
+
+    /* 3. AREA PRINCIPALE (DESKTOP) */
     .main-grid {
       display: grid;
       grid-template-columns: 1fr 290px;
@@ -226,7 +239,6 @@
       align-items: stretch;
     }
 
-    /* ARENA */
     .arena-panel {
       position: relative;
       overflow: hidden;
@@ -245,7 +257,7 @@
       touch-action: none;
     }
 
-    /* SIDEBAR DESTRA */
+    /* SIDEBAR DESTRA (DESKTOP) */
     .sidebar-panel {
       padding: 12px;
       display: flex;
@@ -331,25 +343,42 @@
       cursor: default;
     }
 
+    .trackpad-box {
+      background: #0a0a0a;
+      border: 1.5px solid #555;
+      border-radius: 12px;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+    }
+
+    canvas#trackpadCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+    }
+
     /* BANNER FASE PREPARATORIA */
     .prep-overlay {
       position: absolute;
-      top: 14px;
+      top: 10px;
       left: 50%;
       transform: translateX(-50%);
       background: rgba(18, 18, 18, 0.95);
       border: 2px solid #ffcc00;
       border-radius: 14px;
-      padding: 10px 16px;
+      padding: 8px 14px;
       text-align: center;
       z-index: 6;
       display: none;
-      max-width: 90%;
+      width: 90%;
+      max-width: 480px;
     }
     .prep-overlay.visible { display: block; }
     .prep-overlay p {
-      margin: 0 0 8px;
-      font-size: 13px;
+      margin: 0 0 6px;
+      font-size: 12.5px;
       color: #ffcc00;
     }
     .prep-skip-btn {
@@ -357,10 +386,10 @@
       color: #000000;
       border: none;
       border-radius: 999px;
-      padding: 7px 16px;
+      padding: 6px 14px;
       font-family: inherit;
       font-weight: bold;
-      font-size: 13px;
+      font-size: 12.5px;
       cursor: pointer;
     }
     .prep-skip-btn:hover { background: #ffcc00; }
@@ -369,7 +398,7 @@
     .modal-backdrop {
       position: absolute;
       inset: 0;
-      background: rgba(5, 5, 5, 0.8);
+      background: rgba(5, 5, 5, 0.82);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -448,7 +477,6 @@
       color: #ffcc00;
       border-color: #ffcc00;
     }
-
     .diff-btn[data-diff="estremo"].active {
       border-color: #ff4d4d;
       color: #ff6b6b;
@@ -471,34 +499,6 @@
       transform: scale(1.03);
     }
 
-    /* CONTROLLI TOUCH MOBILE */
-    .touch-controls {
-      position: absolute;
-      bottom: 12px;
-      left: 12px;
-      z-index: 8;
-      display: none;
-      grid-template-columns: repeat(3, 38px);
-      grid-template-rows: repeat(3, 38px);
-      gap: 4px;
-      opacity: 0.72;
-    }
-    @media (hover: none) and (pointer: coarse) {
-      .touch-controls.active { display: grid; }
-    }
-    .t-btn {
-      background: #1e1e1e;
-      color: #e5e5e5;
-      border: 1.5px solid #888;
-      border-radius: 8px;
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      touch-action: none;
-    }
-    .t-btn:active { background: #444; }
-
     /* OVERLAY FINALE */
     .fullscreen-overlay {
       position: fixed;
@@ -516,6 +516,7 @@
 
     canvas#endCanvas {
       max-width: 100%;
+      height: auto;
       border: 2px solid #e5e5e5;
       border-radius: 16px;
       background: #0b0b0b;
@@ -536,12 +537,208 @@
       letter-spacing: 3px;
     }
 
-    @media (max-width: 900px) {
-      .main-grid { grid-template-columns: 1fr; }
-      .brand-title { font-size: 18px; }
-      .letter-tile { width: 31px; height: 36px; font-size: 17px; }
-    }
-    @media (max-width: 540px) {
+    /* =========================================================================
+       STRUTTURA MOBILE & TABLET IN 4 QUARTI (25% / 50% / 25%)
+       Grafica e disegni IDENTICI, cambia solo la disposizione verticale!
+       ========================================================================= */
+    @media (max-width: 900px), (hover: none) and (pointer: coarse) {
+      .game-wrapper {
+        height: 100dvh;
+        max-width: 100%;
+        padding: 6px;
+        gap: 6px;
+        display: grid;
+        grid-template-rows: minmax(0, 25fr) minmax(0, 50fr) minmax(0, 25fr);
+        overflow: hidden;
+      }
+
+      /* 1° QUARTO (25% IN ALTO): Parola + Tempo + Mini Forca (0/6 errori) */
+      .top-quarter {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background-color: #161616;
+        border: 2px solid #e5e5e5;
+        border-radius: 14px;
+        padding: 5px 8px;
+        gap: 4px;
+        overflow: hidden;
+      }
+
+      .top-header {
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        padding: 0;
+        gap: 6px;
+        flex-wrap: nowrap;
+      }
+      .brand-title {
+        font-size: 12.5px;
+        white-space: nowrap;
+      }
+      .brand-pill { display: none; }
+      .header-actions { gap: 5px; }
+      .hearts-pill { font-size: 12px; padding: 2px 7px; }
+      .audio-btn, .new-word-btn { font-size: 11px; padding: 3px 8px; }
+
+      .hud-panel {
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        padding: 0;
+        flex: 1;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: 1fr 94px;
+        gap: 8px;
+        align-items: stretch;
+      }
+
+      .hud-subtitle,
+      .stats-row {
+        display: none;
+      }
+
+      .word-section {
+        min-width: 0;
+        justify-content: space-between;
+        gap: 3px;
+      }
+
+      .hint-inline {
+        font-size: 10.5px;
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .word-boxes {
+        min-height: 0;
+        gap: 3px;
+        align-content: center;
+      }
+
+      .letter-tile {
+        width: 24px;
+        height: 28px;
+        font-size: 14px;
+        border-radius: 6px;
+      }
+
+      .mobile-time-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background-color: #121212;
+        border: 1.5px solid #444;
+        border-radius: 8px;
+        padding: 3px 8px;
+      }
+      .mobile-time-box .stat-label {
+        font-size: 9px;
+      }
+      .mobile-time-box .stat-value {
+        font-size: 14px;
+      }
+
+      .mobile-gallows-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background: #0a0a0a;
+        border: 1.5px solid #444;
+        border-radius: 10px;
+        padding: 3px 4px 4px;
+        overflow: hidden;
+      }
+      canvas#mobileGallowsCanvas {
+        display: block;
+        width: 100%;
+        flex: 1;
+        min-height: 0;
+      }
+      .mobile-errors-text {
+        text-align: center;
+        font-size: 10.5px;
+        font-weight: bold;
+        color: #ff4d4d;
+        line-height: 1.1;
+        padding-top: 2px;
+      }
+
+      /* 2° + 3° QUARTO (50% AL CENTRO): TERRENO DI GIOCO */
+      .main-grid {
+        display: contents;
+      }
+      .arena-panel {
+        min-height: 0;
+        height: 100%;
+        width: 100%;
+        border-radius: 14px;
+      }
+
+      /* 4° QUARTO (25% IN BASSO): STATO OMINO + SOLO TRACKPAD */
+      .sidebar-panel {
+        min-height: 0;
+        height: 100%;
+        border-radius: 14px;
+        padding: 6px 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .sb-gallows,
+      .sb-diary,
+      .sb-keyboard {
+        display: none;
+      }
+
+      .mobile-status-bar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background-color: #121212;
+        border: 1.5px solid #444;
+        border-radius: 8px;
+        padding: 3px 10px;
+      }
+      .mobile-status-bar .stat-label {
+        font-size: 9.5px;
+      }
+      .mobile-status-bar .stat-value {
+        font-size: 12.5px;
+      }
+
+      .sb-trackpad {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+      }
+      .sb-trackpad .sidebar-section-title {
+        display: none;
+      }
+      .trackpad-box {
+        flex: 1;
+        min-height: 0;
+        height: 100%;
+        border-radius: 10px;
+      }
+
+      /* Modal iniziale a schermo intero */
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 900;
+        padding: 14px;
+      }
+      .modal-card { padding: 16px 14px; }
+      .modal-title { font-size: 15px; }
       .difficulty-selector { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
@@ -549,46 +746,62 @@
 <body>
 
   <div class="game-wrapper">
-    <!-- 1. HEADER SUPERIORE -->
-    <div class="panel-box top-header">
-      <div class="brand-group">
-        <h1 class="brand-title">L'IMPICCATO DELL'OMINO SCEMO</h1>
-        <span class="brand-pill">grafica fatta malissimo col mouse</span>
+    <!-- 1° QUARTO SU MOBILE (SU PC RESTANO I DUE RIQUADRI SEPARATI IDENTICI) -->
+    <div class="top-quarter">
+      <!-- 1. HEADER SUPERIORE -->
+      <div class="panel-box top-header">
+        <div class="brand-group">
+          <h1 class="brand-title">L'IMPICCATO DELL'OMINO SCEMO</h1>
+          <span class="brand-pill">grafica fatta malissimo col mouse</span>
+        </div>
+        <div class="header-actions">
+          <span class="hearts-pill" id="heartsDisplay" title="Vite rimaste">❤️❤️❤️</span>
+          <button class="audio-btn" id="muteBtn">🔊 Audio: ON</button>
+          <button class="new-word-btn" id="newWordBtn">↻ Nuova</button>
+        </div>
       </div>
-      <div class="header-actions">
-        <span class="hearts-pill" id="heartsDisplay" title="Vite rimaste">❤️❤️❤️</span>
-        <button class="audio-btn" id="muteBtn">🔊 Audio: ON</button>
-        <button class="new-word-btn" id="newWordBtn">↻ Nuova parola</button>
+
+      <!-- 2. HUD PAROLA & STATO -->
+      <div class="panel-box hud-panel">
+        <div class="word-section">
+          <div class="hud-subtitle">
+            PAROLA MALEDETTA DA SCOPRIRE (RACCOGLI LE LETTERE IN GIRO O DIGITA SULLA TASTIERA)
+          </div>
+          <div class="hint-inline" id="hintInline"></div>
+          <div class="word-boxes" id="wordBoxes"></div>
+
+          <!-- Tempo rimasto compatto (visibile solo nel 1° quarto mobile) -->
+          <div class="mobile-time-box">
+            <span class="stat-label">TEMPO RIMASTO</span>
+            <span class="stat-value val-yellow" id="mobileTimerVal">75s</span>
+          </div>
+        </div>
+
+        <!-- Mini forca compatta (visibile solo nel 1° quarto mobile) -->
+        <div class="mobile-gallows-card">
+          <canvas id="mobileGallowsCanvas" width="120" height="86"></canvas>
+          <div class="mobile-errors-text" id="mobileErrorsVal">0 / 6 ERRORI</div>
+        </div>
+
+        <!-- 3 Box Desktop -->
+        <div class="stats-row">
+          <div class="stat-box">
+            <span class="stat-label">ERRORI FORCA</span>
+            <span class="stat-value val-red" id="errorsVal">0 / 6</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">TEMPO RIMASTO</span>
+            <span class="stat-value val-yellow" id="timerVal">75s</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">STATO OMINO</span>
+            <span class="stat-value val-green" id="statusVal">Ignaro (per ora)</span>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- 2. HUD PAROLA & STATO -->
-    <div class="panel-box hud-panel">
-      <div class="word-section">
-        <div class="hud-subtitle">
-          PAROLA MALEDETTA DA SCOPRIRE (RACCOGLI LE LETTERE IN GIRO O DIGITA SULLA TASTIERA)
-        </div>
-        <div class="hint-inline" id="hintInline"></div>
-        <div class="word-boxes" id="wordBoxes"></div>
-      </div>
-
-      <div class="stats-row">
-        <div class="stat-box">
-          <span class="stat-label">ERRORI FORCA</span>
-          <span class="stat-value val-red" id="errorsVal">0 / 6</span>
-        </div>
-        <div class="stat-box">
-          <span class="stat-label">TEMPO RIMASTO</span>
-          <span class="stat-value val-yellow" id="timerVal">75s</span>
-        </div>
-        <div class="stat-box">
-          <span class="stat-label">STATO OMINO</span>
-          <span class="stat-value val-green" id="statusVal">Ignaro (per ora)</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 3. AREA DI GIOCO + SIDEBAR DESTRA -->
+    <!-- 3. AREA DI GIOCO (2°+3° QUARTO MOBILE) + SIDEBAR/TRACKPAD (4° QUARTO MOBILE) -->
     <div class="main-grid">
       <!-- ARENA -->
       <div class="panel-box arena-panel">
@@ -600,23 +813,16 @@
           <button class="prep-skip-btn" id="prepSkipBtn">Ho capito, inizia subito!</button>
         </div>
 
-        <!-- Controlli Touch Mobile -->
-        <div class="touch-controls" id="touchControls">
-          <div></div><button class="t-btn" data-dir="up">▲</button><div></div>
-          <button class="t-btn" data-dir="left">◀</button><div></div><button class="t-btn" data-dir="right">▶</button>
-          <div></div><button class="t-btn" data-dir="down">▼</button><div></div>
-        </div>
-
         <!-- POPUP INIZIALE -->
         <div class="modal-backdrop" id="startModal">
           <div class="modal-card">
             <h2 class="modal-title">ATTENZIONE: JUMP SCARE STUPIDI &amp; SUONI IMPROVVISI</h2>
             <p class="modal-desc">
-              Guida l'omino disegnato malissimo col mouse in questo posto buio e ridicolo. Raccogli le <strong>sfere con le lettere</strong> (oppure premi i tasti sulla tastiera) per completare la parola prima che scada il tempo, finiscano i 3 cuori o la forca si completi.
+              Guida l'omino disegnato malissimo col mouse in questo posto buio e ridicolo. Raccogli le <strong>sfere con le lettere</strong> (su PC puoi anche usare la tastiera) per completare la parola prima che scada il tempo, finiscano i 3 cuori o la forca si completi.
             </p>
 
             <div class="controls-box">
-              <div>• <span class="c-yellow">Muoviti:</span> WASD, Frecce o Touch (trascina sull'arena o usa le frecce).</div>
+              <div>• <span class="c-yellow">Muoviti:</span> WASD / Frecce su PC, oppure usa il <strong>Trackpad</strong> in basso su telefono/tablet.</div>
               <div>• <span class="c-red">Sfere ? rosse:</span> 50% aiuto reale, 35% solo jump scare stupido, 15% svantaggi!</div>
               <div>• <span class="c-green">Se perdi:</span> l'omino viene catturato e impiccato sul serio (con grafica trash).</div>
             </div>
@@ -633,25 +839,38 @@
         </div>
       </div>
 
-      <!-- SIDEBAR DESTRA -->
+      <!-- SIDEBAR DESTRA (PC) / 4° QUARTO STATO + TRACKPAD (MOBILE) -->
       <div class="panel-box sidebar-panel">
-        <div>
+        <div class="sb-gallows">
           <div class="sidebar-section-title">LA FORCA INCOMBENTE</div>
           <div class="gallows-box">
             <canvas id="gallowsCanvas" width="260" height="145"></canvas>
           </div>
         </div>
 
-        <div>
+        <div class="sb-diary">
           <div class="sidebar-section-title">DIARIO DELL'ORRORE STUPIDO</div>
           <div class="diary-box" id="diaryBox">
             <div class="diary-entry info">• In attesa che l'omino entri nel buio...</div>
           </div>
         </div>
 
-        <div>
+        <div class="sb-keyboard">
           <div class="sidebar-section-title">OPPURE PROVA UNA LETTERA AL VOLO</div>
           <div class="keyboard-grid" id="keyboardGrid"></div>
+        </div>
+
+        <!-- Stato omino + Trackpad (visibili nel 4° quarto mobile/tablet) -->
+        <div class="mobile-status-bar">
+          <span class="stat-label">STATO OMINO:</span>
+          <span class="stat-value val-green" id="mobileStatusVal">Ignaro (per ora)</span>
+        </div>
+
+        <div class="sb-trackpad">
+          <div class="sidebar-section-title">TRACKPAD MOVIMENTO</div>
+          <div class="trackpad-box">
+            <canvas id="trackpadCanvas" width="320" height="160"></canvas>
+          </div>
         </div>
       </div>
     </div>
@@ -923,11 +1142,14 @@
     }
 
     // =========================================================================
-    // 2. AUDIO PROCEDURALE (WEB AUDIO API)
+    // 2. AUDIO PROCEDURALE POTENZIATO PER MOBILE (iOS SAFARI & ANDROID)
     // =========================================================================
     class HorrorAudio {
       constructor() {
         this.ctx = null;
+        this.master = null;
+        this.compressor = null;
+        this.unlocked = false;
         this.muted = false;
         this.musicTimer = null;
         this.musicPlaying = false;
@@ -937,20 +1159,53 @@
       }
 
       init() {
+        try {
+          if ('audioSession' in navigator) {
+            navigator.audioSession.type = 'playback';
+          }
+        } catch (e) {}
+
         if (!this.ctx) {
           const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (!AudioCtx) return;
           this.ctx = new AudioCtx();
+          this.master = this.ctx.createGain();
+          this.master.gain.value = 0.85;
+          this.compressor = this.ctx.createDynamicsCompressor();
+          this.master.connect(this.compressor);
+          this.compressor.connect(this.ctx.destination);
         }
-        if (this.ctx.state === 'suspended') this.ctx.resume();
+        if (this.ctx.state === 'suspended' || this.ctx.state === 'interrupted') {
+          this.ctx.resume().catch(() => {});
+        }
+      }
+
+      unlock() {
+        this.init();
+        if (!this.ctx) return;
+        if (this.ctx.state !== 'running') {
+          this.ctx.resume().catch(() => {});
+        }
+        if (!this.unlocked) {
+          try {
+            const b = this.ctx.createBuffer(1, 1, 22050);
+            const src = this.ctx.createBufferSource();
+            src.buffer = b;
+            src.connect(this.ctx.destination);
+            src.start(0);
+            this.unlocked = true;
+          } catch (e) {}
+        }
       }
 
       toggleMute() {
         this.muted = !this.muted;
+        if (!this.muted) this.unlock();
         return this.muted;
       }
 
       startMusic() {
-        this.init();
+        this.unlock();
         if (this.musicPlaying) return;
         this.musicPlaying = true;
         this.scheduleNextNote();
@@ -967,41 +1222,42 @@
       scheduleNextNote() {
         if (!this.musicPlaying) return;
         if (!this.muted && this.ctx) {
+          if (this.ctx.state !== 'running') this.ctx.resume().catch(() => {});
           const baseFreq = this.melody[this.noteIndex % this.melody.length];
           const detune = (Math.random() - 0.5) * 45 + (this.noteIndex % 3 === 0 ? -18 : 12);
           this.playMusicBoxNote(baseFreq, detune);
         }
         this.noteIndex++;
         const clamped = Math.max(0, Math.min(1, this.monsterDistanceRatio));
-        const delay = 170 + clamped * 510;
+        const delay = 175 + clamped * 490;
         this.musicTimer = setTimeout(() => this.scheduleNextNote(), delay);
       }
 
       playMusicBoxNote(freq, detuneCents) {
-        if (!this.ctx || this.muted) return;
+        if (!this.ctx || !this.master || this.muted) return;
         const now = this.ctx.currentTime;
         const osc = this.ctx.createOscillator();
         const osc2 = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
         const g2 = this.ctx.createGain();
 
-        osc.type = 'sine';
+        osc.type = 'triangle';
         osc.frequency.setValueAtTime(freq, now);
         osc.detune.setValueAtTime(detuneCents, now);
 
-        osc2.type = 'triangle';
+        osc2.type = 'sine';
         osc2.frequency.setValueAtTime(freq * 2, now);
         osc2.detune.setValueAtTime(detuneCents * 1.5, now);
 
         gain.gain.setValueAtTime(0.001, now);
-        gain.gain.exponentialRampToValueAtTime(0.06, now + 0.015);
-        gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.55);
+        gain.gain.exponentialRampToValueAtTime(0.20, now + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
 
-        g2.gain.value = 0.25;
+        g2.gain.value = 0.45;
         osc.connect(gain);
         osc2.connect(g2);
         g2.connect(gain);
-        gain.connect(this.ctx.destination);
+        gain.connect(this.master);
 
         osc.start(now);
         osc2.start(now);
@@ -1010,61 +1266,61 @@
       }
 
       playGoodLetter() {
-        if (!this.ctx || this.muted) return;
+        if (!this.ctx || !this.master || this.muted) return;
         const now = this.ctx.currentTime;
         [523.25, 659.25, 783.99].forEach((f, i) => {
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
           osc.type = 'triangle';
           osc.frequency.setValueAtTime(f, now + i * 0.06);
-          gain.gain.setValueAtTime(0.09, now + i * 0.06);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.2);
+          gain.gain.setValueAtTime(0.24, now + i * 0.06);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.22);
           osc.connect(gain);
-          gain.connect(this.ctx.destination);
+          gain.connect(this.master);
           osc.start(now + i * 0.06);
-          osc.stop(now + i * 0.06 + 0.22);
+          osc.stop(now + i * 0.06 + 0.24);
         });
       }
 
       playWrongLetter() {
-        if (!this.ctx || this.muted) return;
+        if (!this.ctx || !this.master || this.muted) return;
         const now = this.ctx.currentTime;
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(160, now);
+        osc.frequency.setValueAtTime(175, now);
         osc.frequency.linearRampToValueAtTime(85, now + 0.28);
-        gain.gain.setValueAtTime(0.14, now);
+        gain.gain.setValueAtTime(0.32, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
         osc.connect(gain);
-        gain.connect(this.ctx.destination);
+        gain.connect(this.master);
         osc.start(now);
         osc.stop(now + 0.32);
       }
 
       playMysteryGood() {
-        if (!this.ctx || this.muted) return;
+        if (!this.ctx || !this.master || this.muted) return;
         const now = this.ctx.currentTime;
         [440, 554, 659, 880].forEach((f, i) => {
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
-          osc.type = 'sine';
+          osc.type = 'triangle';
           osc.frequency.setValueAtTime(f, now + i * 0.05);
-          gain.gain.setValueAtTime(0.11, now + i * 0.05);
+          gain.gain.setValueAtTime(0.24, now + i * 0.05);
           gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.05 + 0.18);
           osc.connect(gain);
-          gain.connect(this.ctx.destination);
+          gain.connect(this.master);
           osc.start(now + i * 0.05);
           osc.stop(now + i * 0.05 + 0.2);
         });
       }
 
       playJumpScare(heavy = false) {
-        if (!this.ctx || this.muted) return;
+        if (!this.ctx || !this.master || this.muted) return;
         const now = this.ctx.currentTime;
         const dur = heavy ? 1.15 : 0.55;
 
-        const bufferSize = this.ctx.sampleRate * dur;
+        const bufferSize = Math.floor(this.ctx.sampleRate * dur);
         const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
         const data = buffer.getChannelData(0);
         for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
@@ -1081,12 +1337,12 @@
         shaper.curve = curve;
 
         const nGain = this.ctx.createGain();
-        nGain.gain.setValueAtTime(heavy ? 0.35 : 0.22, now);
+        nGain.gain.setValueAtTime(heavy ? 0.55 : 0.40, now);
         nGain.gain.exponentialRampToValueAtTime(0.001, now + dur);
 
         noise.connect(shaper);
         shaper.connect(nGain);
-        nGain.connect(this.ctx.destination);
+        nGain.connect(this.master);
         noise.start(now);
 
         const freqs = heavy ? [110, 147, 680, 990] : [220, 620, 810];
@@ -1096,17 +1352,17 @@
           osc.type = idx % 2 === 0 ? 'sawtooth' : 'square';
           osc.frequency.setValueAtTime(f, now);
           osc.frequency.exponentialRampToValueAtTime(f * (idx % 2 === 0 ? 0.45 : 1.6), now + dur);
-          g.gain.setValueAtTime(heavy ? 0.16 : 0.12, now);
+          g.gain.setValueAtTime(heavy ? 0.34 : 0.28, now);
           g.gain.exponentialRampToValueAtTime(0.001, now + dur);
           osc.connect(g);
-          g.connect(this.ctx.destination);
+          g.connect(this.master);
           osc.start(now);
           osc.stop(now + dur);
         });
       }
 
       playSillyTroll() {
-        if (!this.ctx || this.muted) return;
+        if (!this.ctx || !this.master || this.muted) return;
         const now = this.ctx.currentTime;
         const osc = this.ctx.createOscillator();
         const g = this.ctx.createGain();
@@ -1115,26 +1371,26 @@
         osc.frequency.linearRampToValueAtTime(140, now + 0.18);
         osc.frequency.linearRampToValueAtTime(510, now + 0.32);
         osc.frequency.linearRampToValueAtTime(95, now + 0.55);
-        g.gain.setValueAtTime(0.22, now);
+        g.gain.setValueAtTime(0.38, now);
         g.gain.exponentialRampToValueAtTime(0.001, now + 0.58);
         osc.connect(g);
-        g.connect(this.ctx.destination);
+        g.connect(this.master);
         osc.start(now);
         osc.stop(now + 0.6);
       }
 
       playVictory() {
-        if (!this.ctx || this.muted) return;
+        if (!this.ctx || !this.master || this.muted) return;
         const now = this.ctx.currentTime;
         [392, 493.88, 587.33, 783.99].forEach((f, i) => {
           const osc = this.ctx.createOscillator();
           const g = this.ctx.createGain();
           osc.type = 'triangle';
           osc.frequency.setValueAtTime(f, now + i * 0.11);
-          g.gain.setValueAtTime(0.14, now + i * 0.11);
+          g.gain.setValueAtTime(0.30, now + i * 0.11);
           g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.11 + 0.35);
           osc.connect(g);
-          g.connect(this.ctx.destination);
+          g.connect(this.master);
           osc.start(now + i * 0.11);
           osc.stop(now + i * 0.11 + 0.38);
         });
@@ -1143,16 +1399,27 @@
 
     const audio = new HorrorAudio();
 
+    ['touchstart', 'touchend', 'pointerdown', 'mousedown', 'keydown'].forEach(evt => {
+      window.addEventListener(evt, () => audio.unlock(), { passive: true });
+    });
+
     // =========================================================================
     // 3. ELEMENTI DOM & STATO DEL GIOCO
     // =========================================================================
+    const WORLD_W = 780;
+    const WORLD_H = 480;
+
     const canvas = document.getElementById('arenaCanvas');
     const ctx = canvas.getContext('2d');
-    const ARENA_W = canvas.width;
-    const ARENA_H = canvas.height;
 
     const gallowsCanvas = document.getElementById('gallowsCanvas');
     const gCtx = gallowsCanvas.getContext('2d');
+
+    const mobileGallowsCanvas = document.getElementById('mobileGallowsCanvas');
+    const mgCtx = mobileGallowsCanvas.getContext('2d');
+
+    const trackpadCanvas = document.getElementById('trackpadCanvas');
+    const tCtx = trackpadCanvas.getContext('2d');
 
     const heartsDisplay = document.getElementById('heartsDisplay');
     const muteBtn = document.getElementById('muteBtn');
@@ -1162,6 +1429,9 @@
     const errorsVal = document.getElementById('errorsVal');
     const timerVal = document.getElementById('timerVal');
     const statusVal = document.getElementById('statusVal');
+    const mobileErrorsVal = document.getElementById('mobileErrorsVal');
+    const mobileTimerVal = document.getElementById('mobileTimerVal');
+    const mobileStatusVal = document.getElementById('mobileStatusVal');
     const diaryBox = document.getElementById('diaryBox');
     const keyboardGrid = document.getElementById('keyboardGrid');
 
@@ -1171,7 +1441,6 @@
     const prepOverlay = document.getElementById('prepOverlay');
     const prepText = document.getElementById('prepText');
     const prepSkipBtn = document.getElementById('prepSkipBtn');
-    const touchControls = document.getElementById('touchControls');
 
     const endOverlay = document.getElementById('endOverlay');
     const endCanvas = document.getElementById('endCanvas');
@@ -1205,7 +1474,7 @@
     let selectedDifficulty = 'facile';
 
     let state = {
-      phase: 'menu', // 'menu' | 'prep' | 'playing' | 'ended'
+      phase: 'menu',
       difficulty: 'facile',
       wordObj: null,
       word: '',
@@ -1261,15 +1530,25 @@
     ];
 
     let spheres = [];
-
     const keys = {};
-    const touchDirs = { up: false, down: false, left: false, right: false };
-    let pointerActive = false;
-    let pointerStart = { x: 0, y: 0 };
-    let pointerCurr = { x: 0, y: 0 };
+
+    const joy = {
+      active: false,
+      source: null,
+      touchId: null,
+      originX: 0,
+      originY: 0,
+      currX: 0,
+      currY: 0,
+      maxRadius: 34
+    };
+
+    function isMobileView() {
+      return window.matchMedia('(max-width: 900px), (hover: none) and (pointer: coarse)').matches;
+    }
 
     // =========================================================================
-    // 4. COSTRUZIONE TASTIERA SIDEBAR & LOG DIARIO
+    // 4. COSTRUZIONE TASTIERA SIDEBAR (SOLO DESKTOP) & LOG DIARIO
     // =========================================================================
     function buildSidebarKeyboard() {
       keyboardGrid.innerHTML = '';
@@ -1279,6 +1558,7 @@
         btn.textContent = ch;
         btn.dataset.letter = ch;
         btn.addEventListener('click', () => {
+          audio.unlock();
           if (state.phase === 'playing') {
             handleLetterGuess(ch, 'keyboard');
           }
@@ -1313,7 +1593,7 @@
     }
 
     // =========================================================================
-    // 5. EVENTI UI & CONTROLLI
+    // 5. EVENTI UI & CONTROLLI TRACKPAD / ARENA
     // =========================================================================
     diffSelector.addEventListener('click', (e) => {
       const btn = e.target.closest('.diff-btn');
@@ -1329,25 +1609,26 @@
     });
 
     newWordBtn.addEventListener('click', () => {
-      audio.init();
+      audio.unlock();
       startGame(state.phase === 'menu' ? selectedDifficulty : state.difficulty);
     });
 
     startBtn.addEventListener('click', () => {
-      audio.init();
+      audio.unlock();
       startGame(selectedDifficulty);
     });
 
     prepSkipBtn.addEventListener('click', () => {
+      audio.unlock();
       if (state.phase === 'prep') beginHuntPhase();
     });
 
     retryBtn.addEventListener('click', () => {
+      audio.unlock();
       endOverlay.classList.remove('visible');
       endInfo.classList.remove('visible');
       startModal.classList.remove('hidden');
       state.phase = 'menu';
-      touchControls.classList.remove('active');
       audio.stopMusic();
     });
 
@@ -1368,37 +1649,75 @@
       keys[e.key.toLowerCase()] = false;
     });
 
-    touchControls.querySelectorAll('.t-btn').forEach(btn => {
-      const dir = btn.dataset.dir;
-      const setDir = (val) => { touchDirs[dir] = val; };
-      btn.addEventListener('touchstart', (e) => { e.preventDefault(); setDir(true); }, { passive: false });
-      btn.addEventListener('touchend', (e) => { e.preventDefault(); setDir(false); }, { passive: false });
-      btn.addEventListener('touchcancel', () => setDir(false));
-    });
+    function clientToLocalCanvas(targetCanvas, clientX, clientY) {
+      const rect = targetCanvas.getBoundingClientRect();
+      return {
+        x: ((clientX - rect.left) / rect.width) * targetCanvas.width,
+        y: ((clientY - rect.top) / rect.height) * targetCanvas.height
+      };
+    }
 
-    canvas.addEventListener('touchstart', (e) => {
-      if (state.phase !== 'playing') return;
-      const t = e.touches[0];
-      pointerActive = true;
-      pointerStart = { x: t.clientX, y: t.clientY };
-      pointerCurr = { x: t.clientX, y: t.clientY };
-    }, { passive: true });
+    function attachTouchPadListeners(targetCanvas, sourceName) {
+      targetCanvas.addEventListener('touchstart', (e) => {
+        audio.unlock();
+        if (state.phase !== 'playing') return;
+        e.preventDefault();
+        const t = e.changedTouches[0];
+        const pt = clientToLocalCanvas(targetCanvas, t.clientX, t.clientY);
+        joy.active = true;
+        joy.source = sourceName;
+        joy.touchId = t.identifier;
+        joy.originX = pt.x;
+        joy.originY = pt.y;
+        joy.currX = pt.x;
+        joy.currY = pt.y;
+      }, { passive: false });
 
-    canvas.addEventListener('touchmove', (e) => {
-      if (!pointerActive) return;
-      const t = e.touches[0];
-      pointerCurr = { x: t.clientX, y: t.clientY };
-    }, { passive: true });
+      targetCanvas.addEventListener('touchmove', (e) => {
+        if (!joy.active || joy.source !== sourceName) return;
+        e.preventDefault();
+        for (const t of e.changedTouches) {
+          if (t.identifier === joy.touchId) {
+            const pt = clientToLocalCanvas(targetCanvas, t.clientX, t.clientY);
+            joy.currX = pt.x;
+            joy.currY = pt.y;
+            const dx = joy.currX - joy.originX;
+            const dy = joy.currY - joy.originY;
+            const dist = Math.hypot(dx, dy);
+            if (dist > joy.maxRadius) {
+              joy.originX = joy.currX - (dx / dist) * joy.maxRadius;
+              joy.originY = joy.currY - (dy / dist) * joy.maxRadius;
+            }
+            break;
+          }
+        }
+      }, { passive: false });
 
-    canvas.addEventListener('touchend', () => { pointerActive = false; });
-    canvas.addEventListener('touchcancel', () => { pointerActive = false; });
+      const stopPad = (e) => {
+        if (!joy.active || joy.source !== sourceName) return;
+        for (const t of e.changedTouches) {
+          if (t.identifier === joy.touchId) {
+            joy.active = false;
+            joy.source = null;
+            joy.touchId = null;
+            break;
+          }
+        }
+      };
+      targetCanvas.addEventListener('touchend', stopPad, { passive: true });
+      targetCanvas.addEventListener('touchcancel', stopPad, { passive: true });
+    }
+
+    attachTouchPadListeners(trackpadCanvas, 'trackpad');
+    attachTouchPadListeners(canvas, 'arena');
 
     // =========================================================================
     // 6. LOGICA DI AVVIO E DIFFICOLTÀ
     // =========================================================================
     function startGame(difficulty) {
       startModal.classList.add('hidden');
-      touchControls.classList.add('active');
+      joy.active = false;
+      joy.source = null;
 
       const entry = getNextUnlimitedWord();
       state.difficulty = difficulty;
@@ -1418,8 +1737,8 @@
       state.won = false;
 
       player.x = 78;
-      player.y = ARENA_H - 90;
-      monster.x = ARENA_W - 120;
+      player.y = WORLD_H - 90;
+      monster.x = WORLD_W - 120;
       monster.y = 140;
       monster.stunTimer = 0;
       monster.pathTimer = 0;
@@ -1442,7 +1761,6 @@
         addDiaryEntry(`Nuova parola maledetta! Suggerimento: ${entry.hint}`, 'info');
         beginHuntPhase();
       } else if (difficulty === 'difficile') {
-        // Difficile: velocità 8/10 (142 px/s) e luminosità 6/10
         state.timeLeft = 120;
         state.prepTimeLeft = 30;
         monster.speed = 142;
@@ -1454,7 +1772,6 @@
         spheres = [];
         addDiaryEntry(`DIFFICILE - FASE STUDIO (30s)! Suggerimento: ${entry.hint}`, 'info');
       } else {
-        // Estremo: velocità 10/10 (165 px/s) e buio 10/10
         state.timeLeft = 120;
         state.prepTimeLeft = 30;
         monster.speed = 165;
@@ -1485,7 +1802,7 @@
     }
 
     // =========================================================================
-    // 7. SFERE, LETTERE, ULTIMA LETTERA IN FUGA & '?' (50% / 35% / 15%)
+    // 7. SFERE, LETTERE, ULTIMA LETTERA IN FUGA & '?'
     // =========================================================================
     function getNeededUniqueLetters() {
       const needed = new Set();
@@ -1516,8 +1833,8 @@
 
     function findFreeSpot(margin = 28, minPlayerDist = 90) {
       for (let tries = 0; tries < 90; tries++) {
-        const x = 40 + Math.random() * (ARENA_W - 80);
-        const y = 40 + Math.random() * (ARENA_H - 80);
+        const x = 40 + Math.random() * (WORLD_W - 80);
+        const y = 40 + Math.random() * (WORLD_H - 80);
         if (isInsideWall(x, y, margin)) continue;
         if (Math.hypot(x - player.x, y - player.y) < minPlayerDist) continue;
         let overlap = false;
@@ -1529,7 +1846,7 @@
         }
         if (!overlap) return { x, y };
       }
-      return { x: ARENA_W / 2, y: 45 };
+      return { x: WORLD_W / 2, y: 45 };
     }
 
     function spawnInitialSpheres() {
@@ -1642,11 +1959,9 @@
     }
 
     function triggerMysterySphere() {
-      // 50% aiuto reale | 35% solo jump scare | 15% svantaggi per noi
       const roll = Math.random();
 
       if (roll < 0.50) {
-        // 50% AIUTO REALE
         audio.playMysteryGood();
         const goodPick = Math.floor(Math.random() * 3);
         if (goodPick === 0) {
@@ -1677,23 +1992,23 @@
           addDiaryEntry(`Sfera '?': velocità extra per 6 secondi!`, 'good');
         }
       } else if (roll < 0.85) {
-        // 35% SOLO JUMP SCARE (nessuno svantaggio di gioco)
         audio.playSillyTroll();
         state.arenaScareTimer = 0.85;
         state.arenaScareText = ARENA_SCARE_MSGS[Math.floor(Math.random() * ARENA_SCARE_MSGS.length)];
         state.shakeTimer = 0.4;
+        try { if (navigator.vibrate) navigator.vibrate([90, 30, 90]); } catch (e) {}
         showBubble("AHHH! SOLO UNO SPAVENTO!", '#ffcc00', 1.6);
         addDiaryEntry(`JUMP SCARE! Solo spavento stupido (nessun danno).`, 'info');
       } else {
-        // 15% SVANTAGGIO PER NOI
         audio.playJumpScare(false);
         state.shakeTimer = 0.38;
+        try { if (navigator.vibrate) navigator.vibrate([140]); } catch (e) {}
 
         if (Math.random() < 0.65) {
           const angle = Math.random() * Math.PI * 2;
           const dist = 120;
-          let nx = Math.max(35, Math.min(ARENA_W - 35, player.x + Math.cos(angle) * dist));
-          let ny = Math.max(35, Math.min(ARENA_H - 35, player.y + Math.sin(angle) * dist));
+          let nx = Math.max(35, Math.min(WORLD_W - 35, player.x + Math.cos(angle) * dist));
+          let ny = Math.max(35, Math.min(WORLD_H - 35, player.y + Math.sin(angle) * dist));
           if (!isInsideWall(nx, ny, monster.r)) {
             monster.x = nx;
             monster.y = ny;
@@ -1721,8 +2036,8 @@
     // 8. FISICA, COLLISIONI, FUGA ULTIMA LETTERA & PATHFINDING MOSTRO
     // =========================================================================
     function resolveCircleWall(entity, bottomPad = 4) {
-      entity.x = Math.max(entity.r + 4, Math.min(ARENA_W - entity.r - 4, entity.x));
-      entity.y = Math.max(entity.r + 4, Math.min(ARENA_H - entity.r - bottomPad, entity.y));
+      entity.x = Math.max(entity.r + 4, Math.min(WORLD_W - entity.r - 4, entity.x));
+      entity.y = Math.max(entity.r + 4, Math.min(WORLD_H - entity.r - bottomPad, entity.y));
 
       for (const w of walls) {
         const closestX = Math.max(w.x, Math.min(entity.x, w.x + w.w));
@@ -1761,7 +2076,6 @@
 
         let dirX, dirY, spd;
         if (dist < 290) {
-          // Scappa via dal giocatore, schivando lungo gli assi se vicino ai bordi
           const awayX = dx / dist;
           const awayY = dy / dist;
           const perpX = -awayY;
@@ -1770,14 +2084,13 @@
 
           let centerPushX = 0;
           let centerPushY = 0;
-          if (s.x < 75 || s.x > ARENA_W - 75) centerPushX = (ARENA_W / 2 - s.x) / (ARENA_W / 2);
-          if (s.y < 75 || s.y > ARENA_H - 75) centerPushY = (ARENA_H / 2 - s.y) / (ARENA_H / 2);
+          if (s.x < 75 || s.x > WORLD_W - 75) centerPushX = (WORLD_W / 2 - s.x) / (WORLD_W / 2);
+          if (s.y < 75 || s.y > WORLD_H - 75) centerPushY = (WORLD_H / 2 - s.y) / (WORLD_H / 2);
 
           dirX = awayX + perpX * wiggle + centerPushX * 0.95;
           dirY = awayY + perpY * wiggle + centerPushY * 0.95;
           spd = 148;
         } else {
-          // Zampetta nervosamente in giro
           s.wanderAngle += (Math.random() - 0.5) * 3.8 * dt;
           dirX = Math.cos(s.wanderAngle);
           dirY = Math.sin(s.wanderAngle);
@@ -1795,8 +2108,8 @@
 
     function computeMonsterWaypoint() {
       const CELL = 40;
-      const COLS = Math.floor(ARENA_W / CELL);
-      const ROWS = Math.floor(ARENA_H / CELL);
+      const COLS = Math.floor(WORLD_W / CELL);
+      const ROWS = Math.floor(WORLD_H / CELL);
 
       const startC = Math.max(0, Math.min(COLS - 1, Math.floor(monster.x / CELL)));
       const startR = Math.max(0, Math.min(ROWS - 1, Math.floor(monster.y / CELL)));
@@ -1859,9 +2172,9 @@
     function knockMonsterFarAway() {
       const candidates = [
         { x: 55, y: 55 },
-        { x: ARENA_W - 55, y: 55 },
-        { x: 55, y: ARENA_H - 55 },
-        { x: ARENA_W - 55, y: ARENA_H - 55 }
+        { x: WORLD_W - 55, y: 55 },
+        { x: 55, y: WORLD_H - 55 },
+        { x: WORLD_W - 55, y: WORLD_H - 55 }
       ];
       let best = candidates[0];
       let bestDist = -1;
@@ -1910,18 +2223,18 @@
       if (monster.stunTimer > 0) monster.stunTimer -= dt;
 
       let mx = 0, my = 0;
-      if (keys['w'] || keys['arrowup'] || touchDirs.up) my -= 1;
-      if (keys['s'] || keys['arrowdown'] || touchDirs.down) my += 1;
-      if (keys['a'] || keys['arrowleft'] || touchDirs.left) mx -= 1;
-      if (keys['d'] || keys['arrowright'] || touchDirs.right) mx += 1;
+      if (keys['w'] || keys['arrowup']) my -= 1;
+      if (keys['s'] || keys['arrowdown']) my += 1;
+      if (keys['a'] || keys['arrowleft']) mx -= 1;
+      if (keys['d'] || keys['arrowright']) mx += 1;
 
-      if (pointerActive) {
-        const dx = pointerCurr.x - pointerStart.x;
-        const dy = pointerCurr.y - pointerStart.y;
-        const len = Math.hypot(dx, dy);
-        if (len > 12) {
-          mx = dx / len;
-          my = dy / len;
+      if (joy.active) {
+        const dx = joy.currX - joy.originX;
+        const dy = joy.currY - joy.originY;
+        const d = Math.hypot(dx, dy);
+        if (d > 4) {
+          mx = dx / d;
+          my = dy / d;
         }
       }
 
@@ -1936,13 +2249,11 @@
       }
       resolveCircleWall(player);
 
-      // Muovi l'ultima lettera con le gambette se manca solo una lettera!
       updateFleeingLastLetter(dt);
 
       const distToPlayer = Math.hypot(monster.x - player.x, monster.y - player.y);
       audio.monsterDistanceRatio = Math.min(1, distToPlayer / 500);
 
-      // Il mostro insegue sempre normalmente
       if (state.monsterFrozenTimer <= 0 && monster.stunTimer <= 0) {
         monster.pathTimer -= dt;
         if (monster.pathTimer <= 0) {
@@ -1961,7 +2272,6 @@
         resolveCircleWall(monster);
       }
 
-      // Tocco del mostro
       const hitDist = Math.hypot(monster.x - player.x, monster.y - player.y);
       if (hitDist < player.r + monster.r - 4) {
         state.lives--;
@@ -1969,6 +2279,7 @@
         state.arenaScareTimer = 0.85;
         state.arenaScareText = ARENA_SCARE_MSGS[Math.floor(Math.random() * ARENA_SCARE_MSGS.length)];
         audio.playJumpScare(false);
+        try { if (navigator.vibrate) navigator.vibrate([120, 40, 180]); } catch (e) {}
         showBubble(HIT_BUBBLES[Math.floor(Math.random() * HIT_BUBBLES.length)], '#ffee58', 2.0);
         addDiaryEntry(`JUMP SCARE! L'omino ha perso tre anni di vita (-1 ❤️).`, 'danger');
         updateHUD();
@@ -1991,24 +2302,31 @@
         }
       }
 
-      timerVal.textContent = `${Math.ceil(state.timeLeft)}s`;
+      const secs = `${Math.ceil(state.timeLeft)}s`;
+      timerVal.textContent = secs;
+      mobileTimerVal.textContent = secs;
       updateStatusBox(distToPlayer);
     }
 
     function updateStatusBox(distToPlayer) {
+      let text = 'Ignaro (per ora)';
+      let cls = 'stat-value val-green';
+
       if (state.phase === 'prep') {
-        statusVal.textContent = 'Studia indizio...';
-        statusVal.className = 'stat-value val-yellow';
+        text = 'Studia indizio...';
+        cls = 'stat-value val-yellow';
       } else if (state.monsterFrozenTimer > 0) {
-        statusVal.textContent = `Ghiacciato (${Math.ceil(state.monsterFrozenTimer)}s)`;
-        statusVal.className = 'stat-value val-cyan';
+        text = `Ghiacciato (${Math.ceil(state.monsterFrozenTimer)}s)`;
+        cls = 'stat-value val-cyan';
       } else if (distToPlayer < 220) {
-        statusVal.textContent = 'INSEGUITO!';
-        statusVal.className = 'stat-value val-red';
-      } else {
-        statusVal.textContent = 'Ignaro (per ora)';
-        statusVal.className = 'stat-value val-green';
+        text = 'INSEGUITO!';
+        cls = 'stat-value val-red';
       }
+
+      statusVal.textContent = text;
+      statusVal.className = cls;
+      mobileStatusVal.textContent = text;
+      mobileStatusVal.className = cls;
     }
 
     function updateHUD() {
@@ -2017,7 +2335,11 @@
       heartsDisplay.textContent = heartsStr;
 
       errorsVal.textContent = `${state.errors} / ${state.maxErrors}`;
-      timerVal.textContent = `${Math.ceil(state.timeLeft)}s`;
+      mobileErrorsVal.textContent = `${state.errors} / ${state.maxErrors} ERRORI`;
+
+      const secs = `${Math.ceil(state.timeLeft)}s`;
+      timerVal.textContent = secs;
+      mobileTimerVal.textContent = secs;
 
       wordBoxes.innerHTML = '';
       for (let i = 0; i < state.word.length; i++) {
@@ -2046,7 +2368,7 @@
     }
 
     // =========================================================================
-    // 9. RENDERING DARK-SKETCH + FORCA INCOMBENTE + JUMP SCARE ARENA
+    // 9. RENDERING DARK-SKETCH + FORCA INCOMBENTE + CAMERA MOBILE 1:1 + TRACKPAD
     // =========================================================================
     function jitter(seed, amp = 1.6) {
       const x = Math.sin(seed * 12.9898 + state.sketchSeed * 0.17) * 43758.5453;
@@ -2075,55 +2397,185 @@
       c.stroke();
     }
 
-    function drawGallowsPreview() {
-      const W = gallowsCanvas.width;
-      const H = gallowsCanvas.height;
-      gCtx.fillStyle = '#0a0a0a';
-      gCtx.fillRect(0, 0, W, H);
+    function drawGallowsOn(c, W, H) {
+      c.fillStyle = '#0a0a0a';
+      c.fillRect(0, 0, W, H);
 
-      gCtx.strokeStyle = '#d8d8d8';
-      gCtx.lineWidth = 3;
-      gCtx.lineCap = 'round';
+      const sx = W / 260;
+      const sy = H / 145;
+      const s = Math.min(sx, sy);
+      const ox = (W - 260 * s) / 2;
+      const oy = (H - 145 * s) / 2;
 
-      drawSketchLine(gCtx, 65, H - 20, 125, H - 20, 1, 1.0);
+      c.save();
+      c.translate(ox, oy);
+      c.scale(s, s);
 
-      if (state.errors >= 1) drawSketchLine(gCtx, 95, H - 20, 95, 22, 2, 1.2);
-      if (state.errors >= 2) drawSketchLine(gCtx, 95, 22, 165, 22, 3, 1.2);
+      c.strokeStyle = '#d8d8d8';
+      c.lineWidth = 3;
+      c.lineCap = 'round';
+
+      drawSketchLine(c, 65, 125, 125, 125, 1, 1.0);
+
+      if (state.errors >= 1) drawSketchLine(c, 95, 125, 95, 22, 2, 1.2);
+      if (state.errors >= 2) drawSketchLine(c, 95, 22, 165, 22, 3, 1.2);
       if (state.errors >= 3) {
-        drawSketchLine(gCtx, 95, 45, 118, 22, 4, 1.0);
-        gCtx.strokeStyle = '#b89f35';
-        drawSketchLine(gCtx, 165, 22, 165, 44, 5, 0.8);
+        drawSketchLine(c, 95, 45, 118, 22, 4, 1.0);
+        c.strokeStyle = '#b89f35';
+        drawSketchLine(c, 165, 22, 165, 44, 5, 0.8);
       }
-      gCtx.strokeStyle = '#ffffff';
-      if (state.errors >= 4) drawSketchPolygonCircle(gCtx, 165, 56, 12, 10, 6, 1.1);
+      c.strokeStyle = '#ffffff';
+      if (state.errors >= 4) drawSketchPolygonCircle(c, 165, 56, 12, 10, 6, 1.1);
       if (state.errors >= 5) {
-        drawSketchLine(gCtx, 165, 68, 165, 100, 7, 1.0);
-        drawSketchLine(gCtx, 165, 76, 148, 90, 8, 1.0);
-        drawSketchLine(gCtx, 165, 76, 182, 90, 9, 1.0);
+        drawSketchLine(c, 165, 68, 165, 100, 7, 1.0);
+        drawSketchLine(c, 165, 76, 148, 90, 8, 1.0);
+        drawSketchLine(c, 165, 76, 182, 90, 9, 1.0);
       }
       if (state.errors >= 6) {
-        drawSketchLine(gCtx, 165, 100, 152, 120, 10, 1.0);
-        drawSketchLine(gCtx, 165, 100, 178, 120, 11, 1.0);
+        drawSketchLine(c, 165, 100, 152, 120, 10, 1.0);
+        drawSketchLine(c, 165, 100, 178, 120, 11, 1.0);
+      }
+      c.restore();
+    }
+
+    function drawGallowsPreview() {
+      drawGallowsOn(gCtx, gallowsCanvas.width, gallowsCanvas.height);
+      drawGallowsOn(mgCtx, mobileGallowsCanvas.width, mobileGallowsCanvas.height);
+    }
+
+    function renderTrackpad() {
+      if (trackpadCanvas.offsetParent === null) return;
+
+      const rect = trackpadCanvas.getBoundingClientRect();
+      if (rect.width > 10 && rect.height > 10) {
+        const targetW = Math.round(rect.width);
+        const targetH = Math.round(rect.height);
+        if (Math.abs(trackpadCanvas.width - targetW) > 2 || Math.abs(trackpadCanvas.height - targetH) > 2) {
+          trackpadCanvas.width = targetW;
+          trackpadCanvas.height = targetH;
+        }
+      }
+
+      const TP_W = trackpadCanvas.width;
+      const TP_H = trackpadCanvas.height;
+
+      tCtx.fillStyle = '#0a0a0a';
+      tCtx.fillRect(0, 0, TP_W, TP_H);
+
+      tCtx.strokeStyle = '#181818';
+      tCtx.lineWidth = 1;
+      tCtx.beginPath();
+      for (let gx = 0; gx <= TP_W; gx += 28) { tCtx.moveTo(gx, 0); tCtx.lineTo(gx, TP_H); }
+      for (let gy = 0; gy <= TP_H; gy += 28) { tCtx.moveTo(0, gy); tCtx.lineTo(TP_W, gy); }
+      tCtx.stroke();
+
+      const cx = TP_W / 2;
+      const cy = TP_H / 2;
+
+      if (joy.active && joy.source === 'trackpad') {
+        tCtx.strokeStyle = 'rgba(243, 198, 35, 0.65)';
+        tCtx.fillStyle = 'rgba(243, 198, 35, 0.08)';
+        tCtx.lineWidth = 2;
+        drawSketchPolygonCircle(tCtx, joy.originX, joy.originY, joy.maxRadius, 12, 800, 1.2);
+        tCtx.fill();
+
+        tCtx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+        tCtx.lineWidth = 2;
+        tCtx.beginPath();
+        tCtx.moveTo(joy.originX, joy.originY);
+        tCtx.lineTo(joy.currX, joy.currY);
+        tCtx.stroke();
+
+        tCtx.fillStyle = '#f3c623';
+        tCtx.beginPath();
+        tCtx.arc(joy.currX, joy.currY, 14, 0, Math.PI * 2);
+        tCtx.fill();
+      } else {
+        const ringR = Math.min(32, Math.max(20, TP_H * 0.24));
+        tCtx.strokeStyle = '#2d2d2d';
+        tCtx.lineWidth = 2;
+        drawSketchPolygonCircle(tCtx, cx, cy, ringR, 12, 810, 1.2);
+        drawSketchLine(tCtx, cx - 12, cy, cx + 12, cy, 811, 0.7);
+        drawSketchLine(tCtx, cx, cy - 12, cx, cy + 12, 812, 0.7);
+
+        tCtx.fillStyle = '#666';
+        tCtx.font = 'bold 12px "Comic Sans MS", "Chalkboard SE", cursive';
+        tCtx.textAlign = 'center';
+        tCtx.textBaseline = 'middle';
+        tCtx.fillText('TRACKPAD — TRASCINA QUI IL POLLICE', cx, TP_H - 14);
       }
     }
 
+    function getCameraTransform() {
+      if (!isMobileView()) {
+        if (canvas.width !== WORLD_W || canvas.height !== WORLD_H) {
+          canvas.width = WORLD_W;
+          canvas.height = WORLD_H;
+        }
+        return { scale: 1, camX: 0, camY: 0, viewW: WORLD_W, viewH: WORLD_H };
+      }
+
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width > 10 && rect.height > 10) {
+        const targetW = 540;
+        const targetH = Math.max(240, Math.round(targetW * (rect.height / rect.width)));
+        if (Math.abs(canvas.width - targetW) > 2 || Math.abs(canvas.height - targetH) > 2) {
+          canvas.width = targetW;
+          canvas.height = targetH;
+        }
+      }
+
+      const scale = Math.min(canvas.width / 460, canvas.height / WORLD_H);
+      const viewW = canvas.width / scale;
+      const viewH = canvas.height / scale;
+
+      let camX = 0;
+      let camY = 0;
+      if (viewW < WORLD_W) {
+        camX = Math.max(0, Math.min(WORLD_W - viewW, player.x - viewW / 2));
+      } else {
+        camX = -(viewW - WORLD_W) / 2;
+      }
+      if (viewH < WORLD_H) {
+        camY = Math.max(0, Math.min(WORLD_H - viewH, player.y - viewH / 2));
+      } else {
+        camY = -(viewH - WORLD_H) / 2;
+      }
+
+      return { scale, camX, camY, viewW, viewH };
+    }
+
     function renderArena() {
+      const cam = getCameraTransform();
+      const CW = canvas.width;
+      const CH = canvas.height;
+
       ctx.save();
+      ctx.fillStyle = '#0a0a0a';
+      ctx.fillRect(0, 0, CW, CH);
+
       if (state.shakeTimer > 0) {
         const mag = 7;
         ctx.translate((Math.random() - 0.5) * mag * 2, (Math.random() - 0.5) * mag * 2);
       }
 
-      ctx.fillStyle = '#0a0a0a';
-      ctx.fillRect(0, 0, ARENA_W, ARENA_H);
+      ctx.save();
+      ctx.scale(cam.scale, cam.scale);
+      ctx.translate(-cam.camX, -cam.camY);
 
       ctx.strokeStyle = '#181818';
       ctx.lineWidth = 1;
       const gridStep = 34;
       ctx.beginPath();
-      for (let gx = 0; gx <= ARENA_W; gx += gridStep) { ctx.moveTo(gx, 0); ctx.lineTo(gx, ARENA_H); }
-      for (let gy = 0; gy <= ARENA_H; gy += gridStep) { ctx.moveTo(0, gy); ctx.lineTo(ARENA_W, gy); }
+      for (let gx = 0; gx <= WORLD_W; gx += gridStep) { ctx.moveTo(gx, 0); ctx.lineTo(gx, WORLD_H); }
+      for (let gy = 0; gy <= WORLD_H; gy += gridStep) { ctx.moveTo(0, gy); ctx.lineTo(WORLD_W, gy); }
       ctx.stroke();
+
+      if (isMobileView()) {
+        ctx.strokeStyle = '#2b2b2b';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(0, 0, WORLD_W, WORLD_H);
+      }
 
       ctx.strokeStyle = '#666';
       ctx.lineWidth = 2;
@@ -2144,7 +2596,6 @@
 
       for (const s of spheres) {
         if (s.type === 'letter') {
-          // Se è l'ultima lettera mancante, le spuntano due gambette che corrono!
           if (isLastLetterRunning && s.char === lastChar) {
             const legSwing = Math.sin(s.walkCycle || 0) * 6;
             ctx.strokeStyle = '#d4af37';
@@ -2175,8 +2626,6 @@
       drawMonster(ctx, monster.x, monster.y, monster.r);
       drawStickman(ctx, player.x, player.y, player.walkCycle);
 
-      // FASCIO TORCIA:
-      // Facile/Medio: standard | Difficile: luminosità 6/10 | Estremo: buio 10/10
       if (state.phase === 'playing') {
         let innerR = 95;
         let outerR = 245;
@@ -2198,15 +2647,34 @@
         grad.addColorStop(0.88, `rgba(5, 5, 5, ${Math.max(0, darkEdge - 0.04)})`);
         grad.addColorStop(1, `rgba(5, 5, 5, ${darkEdge})`);
         ctx.fillStyle = grad;
-        ctx.fillRect(-20, -20, ARENA_W + 40, ARENA_H + 40);
+        ctx.fillRect(cam.camX - 40, cam.camY - 40, cam.viewW + 80, cam.viewH + 80);
       }
 
       if (state.bubbleTimer > 0 && state.bubbleText) {
-        drawSpeechBubble(ctx, player.x, player.y - 38, state.bubbleText, state.bubbleColor);
+        drawSpeechBubble(ctx, player.x, player.y - 38, state.bubbleText, state.bubbleColor, cam);
+      }
+
+      ctx.restore();
+
+      if (joy.active && joy.source === 'arena') {
+        ctx.save();
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.06)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(joy.originX, joy.originY, joy.maxRadius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = 'rgba(243, 198, 35, 0.65)';
+        ctx.beginPath();
+        ctx.arc(joy.currX, joy.currY, 13, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
       }
 
       if (state.arenaScareTimer > 0) {
-        drawArenaJumpScare(ctx);
+        drawArenaJumpScare(ctx, CW, CH);
       }
 
       ctx.restore();
@@ -2255,13 +2723,16 @@
       c.restore();
     }
 
-    function drawSpeechBubble(c, x, y, text, color) {
+    function drawSpeechBubble(c, x, y, text, color, cam) {
       c.save();
       c.font = 'bold 12px "Comic Sans MS", "Chalkboard SE", cursive';
       const w = Math.min(250, c.measureText(text).width + 20);
       const h = 26;
-      const bx = Math.max(10, Math.min(ARENA_W - w - 10, x - w / 2));
-      const by = Math.max(8, y - h);
+      const minX = cam.camX + 10;
+      const maxX = cam.camX + cam.viewW - w - 10;
+      const minY = cam.camY + 8;
+      const bx = Math.max(minX, Math.min(maxX, x - w / 2));
+      const by = Math.max(minY, y - h);
 
       c.fillStyle = '#fffde7';
       c.strokeStyle = color;
@@ -2286,78 +2757,82 @@
       c.restore();
     }
 
-    function drawArenaJumpScare(c) {
+    function drawArenaJumpScare(c, CW, CH) {
       c.save();
       c.fillStyle = 'rgba(0, 0, 0, 0.86)';
-      c.fillRect(0, 0, ARENA_W, ARENA_H);
+      c.fillRect(0, 0, CW, CH);
 
-      const boxW = 360;
-      const boxH = 220;
-      const bx = (ARENA_W - boxW) / 2;
-      const by = (ARENA_H - boxH) / 2 - 20;
-      const cx = ARENA_W / 2;
-      const cy = by + boxH / 2;
+      const scale = Math.min(1, CW / 480, CH / 360);
+      const boxW = 360 * scale;
+      const boxH = 220 * scale;
+      const cx = CW / 2;
+      const cy = CH / 2 - 18 * scale;
+      const bx = cx - boxW / 2;
+      const by = cy - boxH / 2;
 
       c.save();
       c.beginPath();
       c.rect(bx, by, boxW, boxH);
       c.clip();
 
+      c.translate(cx, cy);
+      c.scale(scale, scale);
+
       c.fillStyle = '#070707';
-      c.fillRect(bx, by, boxW, boxH);
+      c.fillRect(-180, -110, 360, 220);
 
       c.strokeStyle = '#f3c623';
       c.lineWidth = 1.6;
       for (let i = 0; i < 16; i++) {
         const a = (i / 16) * Math.PI * 2;
         c.beginPath();
-        c.moveTo(cx, cy);
-        c.lineTo(cx + Math.cos(a) * 260, cy + Math.sin(a) * 260);
+        c.moveTo(0, 0);
+        c.lineTo(Math.cos(a) * 260, Math.sin(a) * 260);
         c.stroke();
       }
 
       c.fillStyle = '#181818';
       c.strokeStyle = '#ffffff';
       c.lineWidth = 4;
-      drawSketchPolygonCircle(c, cx, cy, 74, 14, 700, 4.5);
+      drawSketchPolygonCircle(c, 0, 0, 74, 14, 700, 4.5);
       c.fill();
       c.stroke();
 
       c.fillStyle = '#f3c623';
-      drawSketchPolygonCircle(c, cx - 26, cy - 18, 16, 10, 710, 2);
+      drawSketchPolygonCircle(c, -26, -18, 16, 10, 710, 2);
       c.fill();
       c.fillStyle = '#000';
       c.beginPath();
-      c.arc(cx - 26 + jitter(711, 2), cy - 18 + jitter(712, 2), 4, 0, Math.PI * 2);
+      c.arc(-26 + jitter(711, 2), -18 + jitter(712, 2), 4, 0, Math.PI * 2);
       c.fill();
 
       c.fillStyle = '#ff3b3b';
-      drawSketchPolygonCircle(c, cx + 26, cy - 16, 13, 9, 720, 2.5);
+      drawSketchPolygonCircle(c, 26, -16, 13, 9, 720, 2.5);
       c.fill();
       c.fillStyle = '#000';
       c.beginPath();
-      c.arc(cx + 26 + jitter(721, 2), cy - 16 + jitter(722, 2), 3.5, 0, Math.PI * 2);
+      c.arc(26 + jitter(721, 2), -16 + jitter(722, 2), 3.5, 0, Math.PI * 2);
       c.fill();
 
       c.fillStyle = '#111';
       c.strokeStyle = '#ff3b3b';
       c.lineWidth = 4;
-      c.fillRect(cx - 32, cy + 16, 64, 30);
-      c.strokeRect(cx - 32, cy + 16, 64, 30);
+      c.fillRect(-32, 16, 64, 30);
+      c.strokeRect(-32, 16, 64, 30);
 
       c.strokeStyle = '#ffffff';
       c.lineWidth = 2;
-      for (let tx = cx - 24; tx <= cx + 24; tx += 10) {
-        drawSketchLine(c, tx, cy + 18, tx - 2, cy + 29, tx, 1.2);
-        drawSketchLine(c, tx, cy + 44, tx + 2, cy + 33, tx + 5, 1.2);
+      for (let tx = -24; tx <= 24; tx += 10) {
+        drawSketchLine(c, tx, 18, tx - 2, 29, tx, 1.2);
+        drawSketchLine(c, tx, 44, tx + 2, 33, tx + 5, 1.2);
       }
 
       c.restore();
 
       c.fillStyle = '#ff3b3b';
-      c.font = 'bold 26px "Comic Sans MS", "Chalkboard SE", cursive';
+      c.font = `bold ${Math.round(24 * scale)}px "Comic Sans MS", "Chalkboard SE", cursive`;
       c.textAlign = 'center';
-      c.fillText(state.arenaScareText, cx, by + boxH + 42, ARENA_W - 40);
+      c.fillText(state.arenaScareText, cx, by + boxH + 34 * scale, CW - 30);
       c.restore();
     }
 
@@ -2370,8 +2845,9 @@
       state.phase = 'ended';
       state.won = won;
       state.endReasonText = reasonText;
+      joy.active = false;
+      joy.source = null;
       prepOverlay.classList.remove('visible');
-      touchControls.classList.remove('active');
       audio.stopMusic();
 
       endOverlay.classList.add('visible');
@@ -2384,6 +2860,7 @@
         startVictoryAnimation();
       } else {
         audio.playJumpScare(true);
+        try { if (navigator.vibrate) navigator.vibrate([200, 50, 200, 50, 300]); } catch (e) {}
         startTrashJumpScareThenHangman();
       }
     }
@@ -2612,6 +3089,7 @@
 
       update(dt);
       renderArena();
+      renderTrackpad();
 
       requestAnimationFrame(gameLoop);
     }
@@ -2620,3 +3098,6 @@
   </script>
 </body>
 </html>
+```
+
+Una volta fatto **Commit changes**, aspetta 1 minuto e prova dal telefono su **`https://beamorgan200021-sudo.github.io/impiccato/?v=4`**!
